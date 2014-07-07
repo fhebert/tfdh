@@ -1,3 +1,10 @@
+# Build directories
+bin/
+build/
+
+# Mac things
+.DS_Store
+
 # Compiled Object files
 *.slo
 *.lo
