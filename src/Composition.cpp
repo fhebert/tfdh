@@ -22,6 +22,10 @@ namespace {
 } // helper namespace
 
 
+Composition::Composition(const Element& element)
+: abundances(std::vector<Abundance>(1, Abundance(1.0, element))),
+  meanMolecularWeightPerElectron(element.Z / (double) element.A)
+{}
 
 Composition::Composition(const std::vector<Abundance>& abundances)
 : abundances(abundances),

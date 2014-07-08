@@ -3,6 +3,7 @@
 #define TFDH_COMPOSITION_H
 
 #include "Abundance.h"
+#include "Element.h"
 
 #include <vector>
 
@@ -10,6 +11,7 @@
 class Composition {
 
   public:
+  Composition(const Element& element); // simple c'tor for one-component plasmas
   Composition(const std::vector<Abundance>& abundances);
 
   const std::vector<Abundance> abundances;
