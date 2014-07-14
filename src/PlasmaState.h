@@ -7,9 +7,8 @@
 #include <vector>
 
 
-class PlasmaState {
+struct PlasmaState {
 
-  public:
   PlasmaState(double rho, double kt, const Composition& comp, bool isRel);
 
   // these "primary" variables are sufficient to define the state uniquely

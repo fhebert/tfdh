@@ -4,9 +4,9 @@
 
 #include <vector>
 
-class Composition;
-class PlasmaState;
+struct Composition;
 struct Element;
+struct PlasmaState;
 
 
 namespace Plasma {

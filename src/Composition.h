@@ -8,9 +8,8 @@
 #include <vector>
 
 
-class Composition {
+struct Composition {
 
-  public:
   Composition(const Element& element); // simple c'tor for one-component plasmas
   Composition(const std::vector<Abundance>& abundances);
 
