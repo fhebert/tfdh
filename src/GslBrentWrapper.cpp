@@ -1,16 +1,12 @@
 
 #include "GslBrentWrapper.h"
+#include "GslFunction.h"
 
 #include <cassert>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_roots.h>
 #include <gsl/gsl_errno.h>
 
-
-double GslFunction_Unpacker(const double x, void *params) {
-  const GslFunction* object = static_cast<const GslFunction*>(params);
-  return object->f(x);
-}
 
 double GslBrent(const GslFunction& func, const double xa, const double xb,
     const double dx_abs)
