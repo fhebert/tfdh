@@ -20,6 +20,8 @@ all: exec
 exec: $(OBJS) | bin
 	@ echo "  CXXLD     tfdh"
 	@ $(CXX) $(CXXFLAGS) $(LIBS) $(HEADER_OBJS) build/main.o -o bin/tfdh
+	@ echo "  CXXLD     Test_RadialIntegral"
+	@ $(CXX) $(CXXFLAGS) $(LIBS) $(HEADER_OBJS) build/Test_RadialIntegral.o -o bin/Test_RadialIntegral
 
 build/%.o: src/%.cpp | build
 	@ echo "  CXX       $*.cpp"
