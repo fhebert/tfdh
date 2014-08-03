@@ -1,18 +1,25 @@
 
-CXX = clang++
-CPPFLAGS = -DDEBUG
-CXXFLAGS = -O3 -Wall -Wextra -std=c++11 -march=native
+CXX := clang++
+CPPFLAGS := -DDEBUG
+CXXFLAGS := -O3 -Wall -Wextra -std=c++11 -march=native
+LIBS = -lm -lgsl
 
-SRCS = $(wildcard src/*.cpp)
-OBJS = $(subst src,build,$(SRCS:.cpp=.o))
-DEPS = $(subst src,build,$(SRCS:.cpp=.d))
+SRCS := $(wildcard src/*.cpp)
+OBJS := $(subst src,build,$(SRCS:.cpp=.o))
+DEPS := $(subst src,build,$(SRCS:.cpp=.d))
 
+# when linking executables, only want object files corresponding to headers
+HEADERS := $(wildcard src/*.h)
+POSSIBLE_HEADER_OBJS := $(subst src,build,$(HEADERS:.h=.o))
+HEADER_OBJS := $(filter $(POSSIBLE_HEADER_OBJS), $(OBJS))
 
 all: exec
 
+# we want all object files compiled before we link, but we only link in
+# those object files that correspond to a header.
 exec: $(OBJS) | bin
 	@ echo "  CXXLD     tfdh"
-	@ $(CXX) $(CXXFLAGS) $(OBJS) -o bin/tfdh -lgsl
+	@ $(CXX) $(CXXFLAGS) $(LIBS) $(HEADER_OBJS) build/main.o -o bin/tfdh
 
 build/%.o: src/%.cpp | build
 	@ echo "  CXX       $*.cpp"
