@@ -17,6 +17,7 @@ namespace Plasma {
   double ne(double phi, const PlasmaState& p);
 
   std::vector<double> ni(double phi, const PlasmaState& p);
+  double totalIonChargeDensity(double phi, const PlasmaState& p);
 
   double radiusWignerSeitz(const Element& e, const PlasmaState &p);
   double energyWignerSeitz(const Element& e, const PlasmaState &p);

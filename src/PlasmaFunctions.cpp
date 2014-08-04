@@ -50,6 +50,15 @@ std::vector<double> Plasma::ni(const double phi, const PlasmaState& p) {
   return nis;
 }
 
+double Plasma::totalIonChargeDensity(const double phi, const PlasmaState& p) {
+  const std::vector<double> nis = ni(phi, p);
+  double chargeDensity = 0;
+  for (size_t elem=0; elem<nis.size(); ++elem) {
+    chargeDensity += nis[elem] * p.comp.abundances[elem].element.Z;
+  }
+  return chargeDensity;
+}
+
 
 double Plasma::radiusWignerSeitz(const Element& e, const PlasmaState &p) {
   return pow((3*e.Z)/(4*M_PI*p.ne), 1.0/3.0);
