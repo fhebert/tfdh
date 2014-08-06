@@ -25,14 +25,10 @@ double Plasma::rhoFromNe(const double ne, const Composition& comp) {
 
 double Plasma::ne(const double chi, const double xi, const double kt,
     const double tau) {
-  if (xi < 0) {
-    return 0.0;
-  }
-  else {
-    const double i12 = gfdi(GFDI::Order12, chi + xi, tau);
-    const double i32 = gfdi(GFDI::Order32, chi + xi, tau);
-    return PrefactorNe * pow(kt, 1.5) * (i12 + tau*i32);
-  }
+  const double xiPos = (xi >= 0) ? xi : 0.0;
+  const double i12 = gfdi(GFDI::Order12, chi + xiPos, tau);
+  const double i32 = gfdi(GFDI::Order32, chi + xiPos, tau);
+  return PrefactorNe * pow(kt, 1.5) * (i12 + tau*i32);
 }
 
 double Plasma::ne(const double phi, const PlasmaState& p) {
@@ -42,7 +38,7 @@ double Plasma::ne(const double phi, const PlasmaState& p) {
 
 
 std::vector<double> Plasma::ni(const double phi, const PlasmaState& p) {
-  const double xi = phi/p.kt;
+  const double xi = (phi >= 0.0) ? phi/p.kt : 0.0;
   std::vector<double> nis(p.ni);
   for (size_t elem=0; elem<nis.size(); ++elem) {
     nis[elem] *= exp(-xi * p.comp.abundances[elem].element.Z);
