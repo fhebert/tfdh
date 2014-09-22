@@ -1,5 +1,5 @@
 
-#include "RadialIntegral.h"
+#include "IntegrateOverRadius.h"
 
 #include "GslFunction.h"
 #include "RadialFunction.h"
@@ -40,7 +40,7 @@ namespace {
 
 
 
-double RadialIntegral(const RadialFunction& input) {
+double IntegrateOverRadius(const RadialFunction& input) {
 
   // multiply data values by volume element (4 pi r^2) before integration
   const RadialFunction integrand = weighByVolumeElement(input);

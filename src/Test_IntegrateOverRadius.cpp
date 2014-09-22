@@ -1,6 +1,6 @@
 
+#include "IntegrateOverRadius.h"
 #include "RadialFunction.h"
-#include "RadialIntegral.h"
 
 #include <cmath>
 #include <string>
@@ -16,7 +16,7 @@ int main() {
     f[i] = ri*ri - ri;
   }
   const RadialFunction fr(r, f);
-  const double integral = RadialIntegral(fr);
+  const double integral = IntegrateOverRadius(fr);
   std::cout << "integral value = " << integral << ", vs expected = " << -M_PI/5.0 << "\n";
 
   return 0;

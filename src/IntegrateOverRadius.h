@@ -7,7 +7,7 @@
 #include <vector>
 
 
-double RadialIntegral(const RadialFunction& data);
+double IntegrateOverRadius(const RadialFunction& data);
 
 
 #endif // TFDH_RADIAL_INTEGRAL_H
