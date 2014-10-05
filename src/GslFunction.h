@@ -15,7 +15,7 @@ class GslFunction {
 
 // helper function
 // TODO: documentation
-double GslFunction_Unpacker(const double x, void *params);
+double GslFunction_Unpacker(double x, void *params);
 
 
 #endif // TFDH_GSL_FUNCTION_H
