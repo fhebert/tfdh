@@ -19,9 +19,12 @@ all: exec
 # those object files that correspond to a header.
 exec: $(OBJS) | bin
 	@ echo "  CXXLD     tfdh"
-	@ $(CXX) $(CXXFLAGS) $(LIBS) $(HEADER_OBJS) build/main.o -o bin/tfdh
-	@ echo "  CXXLD     Test_RadialIntegral"
-	@ $(CXX) $(CXXFLAGS) $(LIBS) $(HEADER_OBJS) build/Test_IntegrateOverRadius.o -o bin/Test_IntegrateOverRadius
+	@ $(CXX) $(CXXFLAGS) $(LIBS) $(HEADER_OBJS) build/tfdh.o -o bin/tfdh
+
+tests: $(OBJS) | bin
+	@ echo "  CXX       testIntegrateOverRadius"
+	@ $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c tests/testIntegrateOverRadius.cpp -o build/testIntegrateOverRadius.o -Isrc
+	@ $(CXX) $(CXXFLAGS) $(LIBS) $(HEADER_OBJS) build/testIntegrateOverRadius.o -o bin/testIntegrateOverRadius
 
 build/%.o: src/%.cpp | build
 	@ echo "  CXX       $*.cpp"
