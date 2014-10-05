@@ -7,12 +7,11 @@
 
 
 struct Element {
-  const int A;
-  const int Z;
+  const unsigned A;
+  const unsigned Z;
   const std::string name;
 
-  Element(int a, int z, const std::string n) : A(a), Z(z), name(n) {
-    assert(Z>0 && "Elements have positive charge number!");
+  Element(unsigned a, unsigned z, const std::string n) : A(a), Z(z), name(n) {
     assert(A>=Z && "Elements have at least as many nucleons as protons!");
   }
 };
