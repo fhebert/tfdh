@@ -9,10 +9,10 @@
 
 namespace {
 
-  double compute_mue(const std::vector<Abundance>& abundances) {
+  double compute_mu_e(const std::vector<Abundance>& abundances) {
     double inv_mu_e = 0;
     for (const Abundance& a : abundances) {
-      // NOTE: This assumes a totally ionized plasma, otherwise need to
+      // NOTE: This math assumes a totally ionized plasma, otherwise need to
       // multiply each term in the sum by the ionization fraction.
       inv_mu_e += a.massFraction * a.element.Z / (double) a.element.A;
     }
@@ -29,7 +29,7 @@ Composition::Composition(const Element& element)
 
 Composition::Composition(const std::vector<Abundance>& abundances)
 : abundances(abundances),
-  meanMolecularWeightPerElectron(compute_mue(abundances))
+  meanMolecularWeightPerElectron(compute_mu_e(abundances))
 {
   // sanity check on the mass fractions: they must add to 1
   double totalMassFraction = 0;
