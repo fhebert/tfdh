@@ -10,37 +10,38 @@
 namespace {
 
   // numerous constants used in the analytic approximations
-  const std::array<double, 5> x = {{
+  //const std::array<double, 5> x = {{
+  const auto x = std::array<double, 5> {{
     7.265351e-2, 0.2694608, 0.533122, 0.7868801, 0.9569313}};
 
-  const std::array<double, 5> xi = {{
+  const auto xi = std::array<double, 5> {{
     0.26356032, 1.4134031, 3.5964258, 7.0858100, 12.640801}};
 
-  const std::array<double, 5> h = {{
+  const auto h = std::array<double, 5> {{
     3.818735e-2, 0.1256732, 0.1986308, 0.1976334, 0.1065420}};
 
-  const std::array<double, 5> v = {{
+  const auto v = std::array<double, 5> {{
     0.29505869, 0.32064856, 7.3915570e-2, 3.6087389e-3, 2.3369894e-5}};
 
-  const std::array<std::array<double, 5>, 3> c = {{
+  const auto c = std::array<std::array<double, 5>, 3> {{
     {{0.37045057, 0.41258437, 9.777982e-2, 5.3734153e-3, 3.8746281e-5}},
     {{0.39603109, 0.69468795, 0.22322760, 1.5262934e-2, 1.3081939e-4}},
     {{0.76934619, 1.7891437, 0.70754974, 5.6755672e-2, 5.5571480e-4}}}};
 
-  const std::array<std::array<double, 5>, 3> khi = {{
+  const auto khi = std::array<std::array<double, 5>, 3> {{
     {{0.43139881, 1.7597537, 4.1044654, 7.7467038, 13.457678}},
     {{0.81763176, 2.4723339, 5.1160061, 9.0441465, 15.049882}},
     {{1.2558461, 3.2070406, 6.1239082, 10.316126, 16.597079}}}};
 
 
-  double cube(const double x) {
+  inline double cube(const double x) {
     return x*x*x;
   }
 
   // helper function for GFDI work
   double gfdi_helper(const int k, const double chi, const double tau,
       const double r) {
-    if (chi*tau < 1.e-4 && chi > 0) {
+    if (chi*tau < 1.e-4 && chi > 0.0) {
       return pow(chi, k+3./2)/(k+3./2);
     }
     else if (k==0) {
@@ -76,7 +77,7 @@ double gfdi(const GFDI order, const double chi, const double tau) {
     }
     return value;
   }
-  else if (chi < 14) {
+  else if (chi < 14.0) {
     double value = 0;
     for (int i=1; i<=5; i++) {
       value += h[i-1] * pow(x[i-1], k) * pow(chi, k+3./2)
