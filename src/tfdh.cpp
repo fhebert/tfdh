@@ -7,6 +7,19 @@
 #include <string>
 #include <iostream>
 
+
+
+// helper namespace to hold some useful elements
+namespace Elements {
+  const Element H(1, 1, "Hydrogen");
+  const Element He(4, 2, "Helium");
+  const Element C(12, 6, "Carbon");
+  const Element O(16, 8, "Oxygen");
+  const Element Fe56(56, 26, "Iron-56");
+} // namespace Elements
+
+
+
 int main() {
   std::cout << ToString(Elements::O) << "\n";
   std::cout << ToString(Element(6,5,"weird isotope?")) << "\n";
