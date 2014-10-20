@@ -18,5 +18,8 @@ struct RadialFunction {
 };
 
 
+int WriteToFile(const RadialFunction& rf, const std::string& filename);
+
+
 #endif // TFDH_RADIAL_FUNCTION_H
 
