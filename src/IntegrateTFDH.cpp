@@ -62,5 +62,7 @@ RadialFunction TFDH::integrate(const Element& e, const PlasmaState& p)
     potentials.push_back(solution[0]/ri);
   }
 
+  // TODO delete the gsl stuff?
+
   return RadialFunction(radii, potentials);
 }
