@@ -35,9 +35,21 @@ namespace {
 }
 
 
-RadialFunction TFDH::integrate(const Element& e, const PlasmaState& p)
+RadialFunction TFDH::solve(const Element& e, const PlasmaState& p)
 {
-  const double dr_start = 1e-6;
+  // set parameters here:
+  const double ri = 1e-10;
+  const double rf = 1e-6;
+
+  const double dv0 = rootfindPotential(e, p, ri, rf);
+  return integrateODE(e, p, dv0, ri, rf);
+}
+
+
+RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
+    const double r_init, const double r_final, const double dv0)
+{
+  const double dr_start = r_init;
   const double eps_abs = 1e-6;
   const double eps_rel = 0;
   TfdhParams params(e,p);
@@ -46,8 +58,6 @@ RadialFunction TFDH::integrate(const Element& e, const PlasmaState& p)
       gsl_odeiv2_step_rk8pd, dr_start, eps_abs, eps_rel);
 
   // TODO -- clean all this up
-  const double r_init = 1e-10;
-  const double r_final = 1e-6;
   double r = r_init;
   double solution[2] = {1,2};
 
@@ -66,3 +76,32 @@ RadialFunction TFDH::integrate(const Element& e, const PlasmaState& p)
 
   return RadialFunction(radii, potentials);
 }
+
+
+double TFDH::rootfindPotential(const Element& e, const PlasmaState& p,
+    const double r_init, const double r_final)
+{
+  // find interval that brackets correct potential
+  const double dv = 1.0;
+  double v0 = 0;
+  double v1 = 0;
+
+  const int num_tries = 100;
+  for (int i=0; i<num_tries; ++i) {
+    const auto rf = integrateODE(e, p, r_init, r_final, v0);
+    if (rf.data.back() < 0.0) break;
+    v1 = v0;
+    v0 -= dv;
+  }
+
+
+  // guess a central potential
+  double guess_dv0 = 1;
+
+  // iterate guess
+  // avoid fancy rootfinders here, because we aren't dealing with a smooth
+  // function and its root -- rather, we are trying to find the boundary
+  // between two distinct sets: dv0 too large, dv0 too small
+}
+
+

@@ -2,7 +2,9 @@
 
 #include "Element.h"
 #include "Composition.h"
+#include "IntegrateTFDH.h"
 #include "PlasmaState.h"
+#include "RadialFunction.h"
 
 #include <string>
 #include <iostream>
@@ -40,6 +42,10 @@ int main() {
   std::cout << "plasma ne = " << ps.ne << "\n";
   for (double ni : ps.ni)
     std::cout << "plasma ni = " << ni << "\n";
+
+  const RadialFunction tfdh = TFDH::solve(Elements::Fe56, ps);
+
+  WriteToFile(tfdh, "test_data.dat");
 
   return 0;
 }
