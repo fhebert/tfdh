@@ -58,8 +58,9 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
       gsl_odeiv2_step_rk8pd, dr_start, eps_abs, eps_rel);
 
   // TODO -- clean all this up
+  const double& qe = PhysicalConstantsCGS::ElectronCharge;
   double r = r_init;
-  double solution[2] = {1,2};
+  double solution[2] = {qe*e.Z + r_init*dv0, dv0};
 
   std::vector<double> radii, potentials;
 
