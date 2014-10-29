@@ -42,7 +42,7 @@ RadialFunction TFDH::solve(const Element& e, const PlasmaState& p)
   const double rf = 1e-6;
 
   const double dv0 = rootfindPotential(e, p, ri, rf);
-  return integrateODE(e, p, dv0, ri, rf);
+  return integrateODE(e, p, ri, rf, dv0);
 }
 
 
@@ -88,7 +88,7 @@ double TFDH::rootfindPotential(const Element& e, const PlasmaState& p,
 
   const int num_tries = 100;
   for (int i=0; i<num_tries; ++i) {
-    const auto rf = integrateODE(e, p, r_init, r_final, v0);
+    const auto& rf = integrateODE(e, p, r_init, r_final, v0);
     if (rf.data.back() < 0.0) break;
     v1 = v0;
     v0 -= dv;
