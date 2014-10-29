@@ -7,6 +7,7 @@
 #include "PhysicalConstants.h"
 #include "RadialFunction.h"
 
+#include <cassert>
 #include <cmath>
 #include <vector>
 #include <gsl/gsl_errno.h>
@@ -80,35 +81,47 @@ double TFDH::rootfindPotential(const Element& e, const PlasmaState& p,
     const double r_init, const double r_final)
 {
   // find interval that brackets correct potential
-  const double dv = 1.0;
   double v0 = 0;
   double v1 = 0;
-
-  const int num_tries = 100;
-  for (int i=0; i<num_tries; ++i) {
-    const auto& rf = integrateODE(e, p, r_init, r_final, v0);
-    if (rf.data.back() < 0.0) break;
-    v1 = v0;
-    v0 -= dv;
+  {
+    bool success = false;
+    const double dv = 1.0;
+    const int bracket_attempts = 100;
+    for (int i=0; i<bracket_attempts; ++i) {
+      const auto& rf = integrateODE(e, p, r_init, r_final, v0);
+      if (rf.data.back() < 0.0) {
+        success = true;
+        break;
+      }
+      v1 = v0;
+      v0 -= dv;
+    }
+    assert(success and "failed to bracket potential root");
   }
 
   // iterate guess
   // avoid fancy rootfinders here, because we aren't dealing with a smooth
   // function and its root -- rather, we are trying to find the boundary
   // between two distinct sets: dv0 too large, dv0 too small
-  const int num_root_tries = 100;
-  double v_try;
-  for (int i=0; i<num_root_tries; ++i) {
-    v_try = (v0+v1)/2.0;
-    if (v_try==v0 or v_try==v1) // underflow
-      return v_try;
+  double v_try = 0.0;
+  {
+    bool success = false;
+    const int root_attempts = 100;
+    for (int i=0; i<root_attempts; ++i) {
+      v_try = (v0+v1)/2.0;
+      if (v_try==v0 or v_try==v1) { // underflow
+        success = true;
+        break;
+      }
 
-    const auto& rf = integrateODE(e, p, r_init, r_final, v_try);
-    if (rf.data.back() >= 0.0) {
-      v1 = v_try;
-    } else {
-      v0 = v_try;
+      const auto& rf = integrateODE(e, p, r_init, r_final, v_try);
+      if (rf.data.back() >= 0.0) {
+        v1 = v_try;
+      } else {
+        v0 = v_try;
+      }
     }
+    assert(success and "failed to find potential root within bracket");
   }
 
   return v_try;
