@@ -94,14 +94,26 @@ double TFDH::rootfindPotential(const Element& e, const PlasmaState& p,
     v0 -= dv;
   }
 
-
-  // guess a central potential
-  double guess_dv0 = 1;
-
   // iterate guess
   // avoid fancy rootfinders here, because we aren't dealing with a smooth
   // function and its root -- rather, we are trying to find the boundary
   // between two distinct sets: dv0 too large, dv0 too small
+  const int num_root_tries = 100;
+  double v_try;
+  for (int i=0; i<num_root_tries; ++i) {
+    v_try = (v0+v1)/2.0;
+    if (v_try==v0 or v_try==v1) // underflow
+      return v_try;
+
+    const auto& rf = integrateODE(e, p, r_init, r_final, v_try);
+    if (rf.data.back() >= 0.0) {
+      v1 = v_try;
+    } else {
+      v0 = v_try;
+    }
+  }
+
+  return v_try;
 }
 
 
