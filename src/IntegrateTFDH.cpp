@@ -115,11 +115,7 @@ double TFDH::findPotentialRoot(const Element& e, const PlasmaState& p,
       }
 
       const auto& rf = integrateODE(e, p, r_init, r_final, v_mid);
-      if (rf.data.back() >= 0.0) {
-        v_high = v_mid;
-      } else {
-        v_low = v_mid;
-      }
+      ((rf.data.back() >= 0.0) ? v_high : v_low) = v_mid;
     }
     assert(success and "failed to find potential root within bracket");
   }
