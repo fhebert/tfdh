@@ -40,7 +40,7 @@ RadialFunction TFDH::solve(const Element& e, const PlasmaState& p)
   const double ri = 1e-10;
   const double rf = 1e-6;
 
-  const double dv0 = rootfindPotential(e, p, ri, rf);
+  const double dv0 = findPotentialRoot(e, p, ri, rf);
   return integrateODE(e, p, ri, rf, dv0);
 }
 
@@ -77,24 +77,24 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
 }
 
 
-double TFDH::rootfindPotential(const Element& e, const PlasmaState& p,
+double TFDH::findPotentialRoot(const Element& e, const PlasmaState& p,
     const double r_init, const double r_final)
 {
   // find interval that brackets correct potential
-  double v0 = 0;
-  double v1 = 0;
+  double v_low = 0;
+  double v_high = 0;
   {
     bool success = false;
-    const double dv = 1.0;
+    const double v_step = 1.0;
     const int bracket_attempts = 100;
     for (int i=0; i<bracket_attempts; ++i) {
-      const auto& rf = integrateODE(e, p, r_init, r_final, v0);
+      const auto& rf = integrateODE(e, p, r_init, r_final, v_low);
       if (rf.data.back() < 0.0) {
         success = true;
         break;
       }
-      v1 = v0;
-      v0 -= dv;
+      v_high = v_low;
+      v_low -= v_step;
     }
     assert(success and "failed to bracket potential root");
   }
@@ -102,29 +102,29 @@ double TFDH::rootfindPotential(const Element& e, const PlasmaState& p,
   // iterate guess
   // avoid fancy rootfinders here, because we aren't dealing with a smooth
   // function and its root -- rather, we are trying to find the boundary
-  // between two distinct sets: dv0 too large, dv0 too small
-  double v_try = 0.0;
+  // between two distinct sets: v too large, v too small
+  double v_mid = 0.0;
   {
     bool success = false;
     const int root_attempts = 100;
     for (int i=0; i<root_attempts; ++i) {
-      v_try = (v0+v1)/2.0;
-      if (v_try==v0 or v_try==v1) { // underflow
+      v_mid = (v_low + v_high)/2.0;
+      if (v_mid==v_low or v_mid==v_high) { // underflow
         success = true;
         break;
       }
 
-      const auto& rf = integrateODE(e, p, r_init, r_final, v_try);
+      const auto& rf = integrateODE(e, p, r_init, r_final, v_mid);
       if (rf.data.back() >= 0.0) {
-        v1 = v_try;
+        v_high = v_mid;
       } else {
-        v0 = v_try;
+        v_low = v_mid;
       }
     }
     assert(success and "failed to find potential root within bracket");
   }
 
-  return v_try;
+  return v_mid;
 }
 
 
