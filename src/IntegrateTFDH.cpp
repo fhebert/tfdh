@@ -99,10 +99,9 @@ double TFDH::findPotentialRoot(const Element& e, const PlasmaState& p,
     assert(success and "failed to bracket potential root");
   }
 
-  // iterate guess
-  // avoid fancy rootfinders here, because we aren't dealing with a smooth
-  // function and its root -- rather, we are trying to find the boundary
-  // between two distinct sets: v too large, v too small
+  // find "root" within this bracket
+  // we aren't looking for a traditional root, just the boundary between
+  // potentials that diverge to +infty or -infty... so do something simple
   double v_mid = 0.0;
   {
     bool success = false;
