@@ -12,8 +12,6 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_odeiv2.h>
 
-#include <iostream>
-
 namespace {
 
   struct TfdhParams {
