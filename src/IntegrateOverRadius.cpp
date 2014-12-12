@@ -2,10 +2,10 @@
 #include "IntegrateOverRadius.h"
 
 #include "GslFunction.h"
+#include "GslQuadratureWrapper.h"
 #include "RadialFunction.h"
 
 #include <cmath>
-#include <gsl/gsl_integration.h>
 #include <gsl/gsl_spline.h>
 
 
@@ -56,20 +56,10 @@ double integrateOverRadius(const RadialFunction& input) {
   //   1- use the spline's exact integral
   //   2- use a spectral type approach
   //   3- ?
-  double result, abs_err;
-  size_t num_eval;
-  {
-    gsl_function f;
-    f.params = static_cast<GslFunction*>(&interp_integrand);
-    f.function = &GslFunction_Unpacker;
-
-    const double r_min = integrand.radii.front();
-    const double r_max = integrand.radii.back();
-    const double eps_abs = 1.0e-6;
-    const double eps_rel = eps_abs;
-    gsl_integration_qng(&f, r_min, r_max, eps_abs, eps_rel, &result, &abs_err, &num_eval);
-  }
-
-  return result;
+  const double r_min = integrand.radii.front();
+  const double r_max = integrand.radii.back();
+  const double eps_abs = 1.0e-6;
+  const double eps_rel = eps_abs;
+  return gslQuadratureNG(interp_integrand, r_min, r_max, eps_abs, eps_rel);
 }
 
