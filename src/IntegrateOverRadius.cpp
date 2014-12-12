@@ -1,8 +1,7 @@
 
 #include "IntegrateOverRadius.h"
 
-#include "GslFunction.h"
-#include "GslQuadratureWrapper.h"
+#include "GslWrappers.h"
 #include "RadialFunction.h"
 
 #include <cmath>

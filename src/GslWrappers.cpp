@@ -1,11 +1,17 @@
 
-#include "GslBrentWrapper.h"
-#include "GslFunction.h"
+#include "GslWrappers.h"
 
 #include <cassert>
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_integration.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_roots.h>
-#include <gsl/gsl_errno.h>
+
+
+double GslFunction_Unpacker(const double x, void *params) {
+  const GslFunction* object = static_cast<const GslFunction*>(params);
+  return object->f(x);
+}
 
 
 double gslBrent(const GslFunction& func, const double xa, const double xb,
@@ -47,6 +53,22 @@ double gslBrent(const GslFunction& func, const double xa, const double xb,
 
   const double result = gsl_root_fsolver_root(solver);
   gsl_root_fsolver_free(solver);
+  return result;
+}
+
+
+double gslQuadratureNG(const GslFunction& func, const double xi, const double xf,
+    const double eps_abs, const double eps_rel)
+{
+  double result = 0.0;
+  double abs_err = 0.0;
+  size_t num_eval = 0;
+  {
+    gsl_function f;
+    f.params = const_cast<GslFunction*>(&func);
+    f.function = &GslFunction_Unpacker;
+    gsl_integration_qng(&f, xi, xf, eps_abs, eps_rel, &result, &abs_err, &num_eval);
+  }
   return result;
 }
 
