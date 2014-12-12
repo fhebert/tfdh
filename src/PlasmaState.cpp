@@ -14,15 +14,14 @@
 // helper functions used in initializing the plasma state
 namespace {
 
-  // alias for convenience
-  const double& mp = PhysicalConstantsCGS::ProtonMass;
-
   double computeNe(const double rho, const Composition& comp) {
+    const double& mp = PhysicalConstantsCGS::ProtonMass;
     return rho / (mp * comp.meanMolecularWeightPerElectron);
   }
 
   std::vector<double> computeNi(double rho, const Composition& comp) {
     const std::vector<Abundance>& abundances = comp.abundances;
+    const double& mp = PhysicalConstantsCGS::ProtonMass;
     std::vector<double> result(abundances.size());
     for (size_t elem=0; elem<abundances.size(); ++elem) {
       result[elem] = rho * abundances[elem].massFraction
