@@ -8,7 +8,7 @@
 #include <gsl/gsl_errno.h>
 
 
-double GslBrent(const GslFunction& func, const double xa, const double xb,
+double gslBrent(const GslFunction& func, const double xa, const double xb,
     const double dx_abs)
 {
   // check that interval is non-empty

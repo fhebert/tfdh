@@ -5,7 +5,7 @@
 #include "GslFunction.h"
 
 
-double GslBrent(const GslFunction& func, double x1, double x2, double dx_abs);
+double gslBrent(const GslFunction& func, double x1, double x2, double dx_abs);
 
 
 #endif // TFDH_GSL_BRENT_WRAPPER_H

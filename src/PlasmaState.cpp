@@ -63,7 +63,7 @@ namespace {
 
     // find the root
     const double chi_eps = std::numeric_limits<double>::epsilon();
-    return GslBrent(func, chiA, chiB, chi_eps);
+    return gslBrent(func, chiA, chiB, chi_eps);
   }
 
 } // helper namespace

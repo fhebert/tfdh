@@ -8,6 +8,7 @@
 #include <gsl/gsl_integration.h>
 #include <gsl/gsl_spline.h>
 
+
 // helpers
 namespace {
 
@@ -40,7 +41,7 @@ namespace {
 
 
 
-double IntegrateOverRadius(const RadialFunction& input) {
+double integrateOverRadius(const RadialFunction& input) {
 
   // multiply data values by volume element (4 pi r^2) before integration
   const RadialFunction integrand = weighByVolumeElement(input);
