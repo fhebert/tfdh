@@ -10,13 +10,6 @@
 #include <cmath>
 
 
-namespace {
-  const double& me = PhysicalConstantsCGS::ElectronMass;
-  const double& hb = PhysicalConstantsCGS::Hbar;
-  const double PrefactorNe = pow(2.0 * me, 1.5) / (2.0 * M_PI*M_PI * hb*hb*hb);
-}
-
-
 double Plasma::rhoFromNe(const double ne, const Composition& comp) {
   const double& mp = PhysicalConstantsCGS::ProtonMass;
   return ne * mp * comp.meanMolecularWeightPerElectron;
@@ -28,7 +21,8 @@ double Plasma::ne(const double chi, const double xi, const double kt,
   const double xiPos = (xi >= 0) ? xi : 0.0;
   const double i12 = gfdi(GFDI::Order12, chi + xiPos, tau);
   const double i32 = gfdi(GFDI::Order32, chi + xiPos, tau);
-  return PrefactorNe * pow(kt, 1.5) * (i12 + tau*i32);
+  const double& NePrefactor = PhysicalConstantsCGS::NePrefactor;
+  return NePrefactor * pow(kt, 1.5) * (i12 + tau*i32);
 }
 
 double Plasma::ne(const double phi, const PlasmaState& p) {

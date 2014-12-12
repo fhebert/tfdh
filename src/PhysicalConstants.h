@@ -2,6 +2,8 @@
 #ifndef TFDH_PHYSICAL_CONSTANTS_CGS_H
 #define TFDH_PHYSICAL_CONSTANTS_CGS_H
 
+#include <cmath>
+
 
 namespace PhysicalConstantsCGS
 {
@@ -20,6 +22,8 @@ namespace PhysicalConstantsCGS
   // useful combinations
   const double MeCC = ElectronMass * SpeedLight * SpeedLight;
   const double MpCC = ProtonMass * SpeedLight * SpeedLight;
+  const double NePrefactor = pow(2.0*ElectronMass, 1.5)
+                             / (2.0 * M_PI*M_PI * Hbar*Hbar*Hbar);
 
   // useful physical scales
   const double BohrRadius = 5.2917721e-9; // cm
