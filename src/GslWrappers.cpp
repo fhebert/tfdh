@@ -72,3 +72,23 @@ double gslQuadratureNG(const GslFunction& func, const double xi, const double xf
   return result;
 }
 
+
+double gslQuadratureAG(const GslFunction& func, const double xi, const double xf,
+    const double eps_abs, const double eps_rel)
+{
+  double result = 0.0;
+  double abs_err = 0.0;
+  const size_t max_intervals = 100;
+  gsl_integration_workspace* ws = gsl_integration_workspace_alloc(max_intervals);
+  {
+    gsl_function f;
+    f.params = const_cast<GslFunction*>(&func);
+    f.function = &GslFunction_Unpacker;
+    gsl_integration_qag(&f, xi, xf, eps_abs, eps_rel,
+        max_intervals, GSL_INTEG_GAUSS21, ws,
+        &result, &abs_err);
+  }
+  gsl_integration_workspace_free(ws);
+  return result;
+}
+

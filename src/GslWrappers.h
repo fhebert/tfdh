@@ -22,6 +22,8 @@ double gslBrent(const GslFunction& func, double x1, double x2, double dx_abs);
 
 double gslQuadratureNG(const GslFunction& func, double x1, double x2,
     double eps_abs, double eps_rel);
+double gslQuadratureAG(const GslFunction& func, double x1, double x2,
+    double eps_abs, double eps_rel);
 
 
 #endif // TFDH_GSL_WRAPPERS_H
