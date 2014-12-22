@@ -45,7 +45,7 @@ int main() {
 
   const RadialFunction tfdh = TFDH::solve(Elements::Fe56, ps);
 
-  WriteToFile(tfdh, "test_data.dat");
+  writeToFile(tfdh, "test_data.dat");
 
   return 0;
 }

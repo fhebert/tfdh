@@ -21,7 +21,7 @@ double GslFunction_Unpacker(double x, void *params);
 double gslBrent(const GslFunction& func, double x1, double x2, double dx_abs);
 
 double gslQuadratureNG(const GslFunction& func, double x1, double x2,
-    double eps_aps, double eps_rel);
+    double eps_abs, double eps_rel);
 
 
 #endif // TFDH_GSL_WRAPPERS_H

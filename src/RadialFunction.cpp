@@ -5,7 +5,7 @@
 #include <fstream>
 
 
-int WriteToFile(const RadialFunction& rf, const std::string& filename)
+int writeToFile(const RadialFunction& rf, const std::string& filename)
 {
   std::ofstream outfile;
   outfile.open(filename);
