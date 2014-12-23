@@ -4,6 +4,7 @@
 #include "Composition.h"
 #include "IntegrateTFDH.h"
 #include "PlasmaState.h"
+#include "PhysicalConstants.h"
 #include "RadialFunction.h"
 
 #include <string>
@@ -28,12 +29,13 @@ int main() {
 
   const double rho = 1e6;
   const double t = 1e7;
+  const double kt = t * PhysicalConstantsCGS::KBoltzmann;
 
   std::vector<Abundance> ab;
   ab.push_back(Abundance(0.5, Elements::H));
   ab.push_back(Abundance(0.5, Elements::He));
   const Composition c(ab);
-  const PlasmaState ps(t, rho, c, false);
+  const PlasmaState ps(rho, kt, c, false);
 
   std::cout << "plasma rho = " << ps.rho << "\n";
   std::cout << "plasma kt = " << ps.kt << "\n";
