@@ -78,6 +78,8 @@ double gslQuadratureAG(const GslFunction& func, const double xi, const double xf
 {
   double result = 0.0;
   double abs_err = 0.0;
+  // TODO: determine minimal sufficient size, or perhaps allocate a global
+  //       workspace to reduce memory load
   const size_t max_intervals = 100;
   gsl_integration_workspace* ws = gsl_integration_workspace_alloc(max_intervals);
   {

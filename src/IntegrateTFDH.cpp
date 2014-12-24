@@ -39,6 +39,7 @@ namespace {
 RadialFunction TFDH::solve(const Element& e, const PlasmaState& p)
 {
   // set parameters here:
+  // TODO: automatic way of tuning the radii?
   const double ri = 1e-14;
   const double rf = 1e-10;
 
@@ -124,6 +125,8 @@ double TFDH::findPotentialRoot(const Element& e, const PlasmaState& p,
     assert(success and "failed to find potential root within bracket");
   }
 
+  // TODO: return the corresponding RadialFunction, to avoid computing it
+  //       a second time!
   return v_mid;
 }
 
