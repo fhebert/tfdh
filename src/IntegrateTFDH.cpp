@@ -39,8 +39,8 @@ namespace {
 RadialFunction TFDH::solve(const Element& e, const PlasmaState& p)
 {
   // set parameters here:
-  const double ri = 1e-10;
-  const double rf = 1e-6;
+  const double ri = 1e-14;
+  const double rf = 1e-10;
 
   const double dv0 = findPotentialRoot(e, p, ri, rf);
   return integrateODE(e, p, ri, rf, dv0);
@@ -67,7 +67,7 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
   radii.push_back(r_init);
   potentials.push_back(solution[0]/r_init);
 
-  const int numsteps = 100;
+  const int numsteps = 1000;
   for (int i=0; i<numsteps; ++i) {
     const double ri = r_init + (i+1)*(r_final-r_init)/numsteps;
     const int status = gsl_odeiv2_driver_apply(d, &r, ri, solution);
@@ -90,7 +90,7 @@ double TFDH::findPotentialRoot(const Element& e, const PlasmaState& p,
   double v_high = 0;
   {
     bool success = false;
-    const double v_step = 1.0;
+    const double v_step = 100.0;
     const int bracket_attempts = 100;
     for (int i=0; i<bracket_attempts; ++i) {
       const auto& rf = integrateODE(e, p, r_init, r_final, v_low);

@@ -24,16 +24,13 @@ namespace Elements {
 
 
 int main() {
-  std::cout << ToString(Elements::O) << "\n";
-  std::cout << ToString(Element(6,5,"weird isotope?")) << "\n";
 
-  const double rho = 1e6;
-  const double t = 1e7;
+  const double rho = 1e8;
+  const double t = 1e5;
   const double kt = t * PhysicalConstantsCGS::KBoltzmann;
 
   std::vector<Abundance> ab;
-  ab.push_back(Abundance(0.5, Elements::H));
-  ab.push_back(Abundance(0.5, Elements::He));
+  ab.push_back(Abundance(1.0, Elements::He));
   const Composition c(ab);
   const PlasmaState ps(rho, kt, c, false);
 
@@ -45,9 +42,12 @@ int main() {
   for (double ni : ps.ni)
     std::cout << "plasma ni = " << ni << "\n";
 
-  const RadialFunction tfdh = TFDH::solve(Elements::Fe56, ps);
+  //const RadialFunction tfdh = TFDH::solve(Elements::Fe56, ps);
+  //writeToFile(tfdh, "test_data.dat");
 
-  writeToFile(tfdh, "test_data.dat");
+  const double bound_electrons = TFDH::boundElectrons(Elements::Fe56, ps);
+  std::cout << "number of bound electrons = " << bound_electrons << "\n";
+  std::cout << "=> effective Z_net = " << Elements::Fe56.Z - bound_electrons << "\n";
 
   return 0;
 }
