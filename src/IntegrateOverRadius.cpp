@@ -59,6 +59,6 @@ double integrateOverRadius(const RadialFunction& input) {
   const double r_max = integrand.radii.back();
   const double eps_abs = 1.0e-6;
   const double eps_rel = eps_abs;
-  return gslQuadratureNG(interp_integrand, r_min, r_max, eps_abs, eps_rel);
+  return gslQuadratureAG(interp_integrand, r_min, r_max, eps_abs, eps_rel);
 }
 
