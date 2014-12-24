@@ -31,7 +31,7 @@ namespace {
     const double ionChargeDensity = Plasma::totalIonChargeDensity(phi, p);
     dfdr[0] = f[1];
     dfdr[1] = -4.0*M_PI*qe * r * (ionChargeDensity - ne);
-    return 0;
+    return GSL_SUCCESS;
   }
 }
 
@@ -64,6 +64,8 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
   double solution[2] = {qe*e.Z + r_init*dv0, dv0};
 
   std::vector<double> radii, potentials;
+  radii.push_back(r_init);
+  potentials.push_back(solution[0]/r_init);
 
   const int numsteps = 100;
   for (int i=0; i<numsteps; ++i) {
@@ -72,6 +74,7 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
     assert(status==GSL_SUCCESS);
     radii.push_back(ri);
     potentials.push_back(solution[0]/ri);
+    if (solution[0] <= 0 or (solution[1]-solution[0])/ri > 0) break;
   }
 
   gsl_odeiv2_driver_free(d);
