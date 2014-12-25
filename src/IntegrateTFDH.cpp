@@ -15,6 +15,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_odeiv2.h>
 
+
 namespace {
 
   struct TfdhParams {
@@ -39,9 +40,13 @@ namespace {
 RadialFunction TFDH::solve(const Element& e, const PlasmaState& p)
 {
   // set parameters here:
-  // TODO: automatic way of tuning the radii?
-  const double ri = 1e-14;
-  const double rf = 1e-10;
+  const double rws = Plasma::radiusWignerSeitz(e,p);
+  const double ri = 1e-5 * rws;
+  // TODO: large ourter radius set to avoid assert failures when rootfinding
+  //       for the central potential. this means we're no longer checking that
+  //       rf < rws
+  //       should add this check back in somewhere
+  const double rf = 1e3 * rws;
 
   const double dv0 = findPotentialRoot(e, p, ri, rf);
   return integrateODE(e, p, ri, rf, dv0);
