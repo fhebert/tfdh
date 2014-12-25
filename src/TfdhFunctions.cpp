@@ -4,6 +4,7 @@
 #include "GslWrappers.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
+#include "PhysicalConstants.h"
 #include "RadialFunction.h"
 
 #include <cmath>
@@ -41,9 +42,11 @@ double TFDH::neBound(const double phi, const PlasmaState& p)
   if (xi < 0) {
     return 0;
   } else if (xi > 1.e4*(1+fabs(p.chi))) {
-    return Plasma::ne(xi, p); // xi very large => xi+chi ~ xi
+    // xi very large => definite integral approaches indefinite integral
+    return Plasma::ne(phi, p);
   } else {
-    return boundFermiDiracIntegral(xi, p);
+    const double& NePrefactor = PhysicalConstantsCGS::NePrefactor;
+    return NePrefactor * pow(p.kt, 1.5) * boundFermiDiracIntegral(xi, p);
   }
 }
 
@@ -67,7 +70,7 @@ RadialFunction TFDH::neBound(const RadialFunction& tfdh, const PlasmaState& p)
   std::vector<double> nebs(tfdh.data.size());
   for (size_t i=0; i<tfdh.radii.size(); ++i) {
     //std::cout << "computing neB..." << std::endl;
-    nebs[i] = neBound(tfdh.data[i]/tfdh.radii[i], p);
+    nebs[i] = neBound(tfdh.data[i], p);
     //std::cout << "  success" << std::endl;
   }
   return RadialFunction(tfdh.radii, nebs);

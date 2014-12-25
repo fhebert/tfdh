@@ -66,7 +66,7 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
 
   std::vector<double> radii, potentials;
   radii.push_back(r_init);
-  potentials.push_back(solution[0]/r_init);
+  potentials.push_back(qe*solution[0]/r_init);
 
   const int numsteps = 1000;
   for (int i=0; i<numsteps; ++i) {
@@ -74,7 +74,7 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
     const int status = gsl_odeiv2_driver_apply(d, &r, ri, solution);
     assert(status==GSL_SUCCESS);
     radii.push_back(ri);
-    potentials.push_back(solution[0]/ri);
+    potentials.push_back(qe*solution[0]/ri);
     if (solution[0] <= 0 or (solution[1]-solution[0])/ri > 0) break;
   }
 
