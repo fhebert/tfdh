@@ -51,35 +51,42 @@ RadialFunction TFDH::solve(const Element& e, const PlasmaState& p)
 RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
     const double r_init, const double r_final, const double dv0)
 {
-  const double dr_start = r_init;
+  TfdhParams params(e,p);
+  const size_t dim = 2;
   const double eps_abs = 1e-6;
   const double eps_rel = 0;
-  TfdhParams params(e,p);
-  gsl_odeiv2_system sys = {tfdhOde, nullptr, 2, &params};
-  gsl_odeiv2_driver* d = gsl_odeiv2_driver_alloc_y_new(&sys,
-      gsl_odeiv2_step_rk8pd, dr_start, eps_abs, eps_rel);
-
-  // TODO -- clean all this up
-  const double& qe = PhysicalConstantsCGS::ElectronCharge;
   double r = r_init;
-  double solution[2] = {qe*e.Z + r_init*dv0, dv0};
+  double dr = r_init;
+  const double& qe = PhysicalConstantsCGS::ElectronCharge;
+  double solution[dim] = {qe*e.Z + r_init*dv0, dv0};
+
+  gsl_odeiv2_step* step = gsl_odeiv2_step_alloc(gsl_odeiv2_step_rk8pd, dim);
+  gsl_odeiv2_control* ctrl = gsl_odeiv2_control_y_new(eps_abs, eps_rel);
+  gsl_odeiv2_evolve* ev = gsl_odeiv2_evolve_alloc(dim);
+  gsl_odeiv2_system sys = {tfdhOde, nullptr, dim, &params};
+  // TODO: use c++11 smart pointers, e.g. as below:
+  //std::unique_ptr<gsl_odeiv2_driver, void(*) (gsl_odeiv2_driver*)> dd(
+  //    gsl_odeiv2_driver_alloc_y_new(&sys, gsl_odeiv2_step_rk8pd, dr_start,
+  //      eps_abs, eps_rel),
+  //    gsl_odeiv2_driver_free);
 
   // TODO: fix units. too many quanities: solution / chi / xi / ...
   std::vector<double> radii, potentials;
   radii.push_back(r_init);
   potentials.push_back(qe*solution[0]/r_init);
 
-  const int numsteps = 1000;
-  for (int i=0; i<numsteps; ++i) {
-    const double ri = r_init + (i+1)*(r_final-r_init)/numsteps;
-    const int status = gsl_odeiv2_driver_apply(d, &r, ri, solution);
+  while (r < r_final) {
+    const int status = gsl_odeiv2_evolve_apply(ev, ctrl, step, &sys, &r, r_final, &dr, solution);
     assert(status==GSL_SUCCESS);
-    radii.push_back(ri);
-    potentials.push_back(qe*solution[0]/ri);
-    if (solution[0] <= 0 or (solution[1]-solution[0])/ri > 0) break;
+    radii.push_back(r);
+    potentials.push_back(qe*solution[0]/r);
+    if (solution[0] <= 0 or (solution[1]-solution[0])/r > 0) break;
   }
+  assert(r < r_final and "integrated ODE until final radius without terminating!");
 
-  gsl_odeiv2_driver_free(d);
+  gsl_odeiv2_evolve_free(ev);
+  gsl_odeiv2_control_free(ctrl);
+  gsl_odeiv2_step_free(step);
   return RadialFunction(radii, potentials);
 }
 
