@@ -64,6 +64,7 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
   double r = r_init;
   double solution[2] = {qe*e.Z + r_init*dv0, dv0};
 
+  // TODO: fix units. too many quanities: solution / chi / xi / ...
   std::vector<double> radii, potentials;
   radii.push_back(r_init);
   potentials.push_back(qe*solution[0]/r_init);
