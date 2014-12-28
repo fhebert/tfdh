@@ -42,7 +42,7 @@ RadialFunction TFDH::solve(const Element& e, const PlasmaState& p)
   // set parameters here:
   const double rws = Plasma::radiusWignerSeitz(e,p);
   const double ri = 1e-5 * rws;
-  // TODO: large ourter radius set to avoid assert failures when rootfinding
+  // TODO: large outer radius set to avoid assert failures when rootfinding
   //       for the central potential. this means we're no longer checking that
   //       rf < rws
   //       should add this check back in somewhere
@@ -75,7 +75,7 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
   //      eps_abs, eps_rel),
   //    gsl_odeiv2_driver_free);
 
-  // TODO: fix units. too many quanities: solution / chi / xi / ...
+  // TODO: fix units. too many quanities: solution / phi / xi / ...
   std::vector<double> radii, potentials;
   radii.push_back(r_init);
   potentials.push_back(qe*solution[0]/r_init);
