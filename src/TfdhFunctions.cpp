@@ -13,7 +13,7 @@
 
 namespace {
 
-  class FermiDiracDistribution : public GslFunction {
+  class FermiDiracDistribution : public GSL::FunctionObject {
     const double xi;
     const PlasmaState p;
     public:
@@ -30,7 +30,7 @@ namespace {
   double boundFermiDiracIntegral(const double xi, const PlasmaState& p) {
     FermiDiracDistribution fd(xi, p);
     const double eps = 1.e-6;
-    return gslQuadratureAG(fd, 0, xi, eps, eps);
+    return GSL::integrate(fd, 0, xi, eps, eps);
   }
 
 }

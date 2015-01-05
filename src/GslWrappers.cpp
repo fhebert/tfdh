@@ -8,13 +8,13 @@
 #include <gsl/gsl_roots.h>
 
 
-double GslFunction_Unpacker(const double x, void *params) {
-  const GslFunction* object = static_cast<const GslFunction*>(params);
+double GSL::callFunctionFromObject(const double x, void *params) {
+  const GSL::FunctionObject* object = static_cast<const GSL::FunctionObject*>(params);
   return object->f(x);
 }
 
 
-double gslBrent(const GslFunction& func, const double xa, const double xb,
+double GSL::findRoot(const GSL::FunctionObject& func, const double xa, const double xb,
     const double dx_abs)
 {
   // check that interval is non-empty
@@ -32,8 +32,8 @@ double gslBrent(const GslFunction& func, const double xa, const double xb,
   //     GslFunction object and then calls the member function f(x) on it.
   //     in this sense it is "unpacking" the object.
   gsl_function f;
-  f.params = const_cast<GslFunction*>(&func);
-  f.function = &GslFunction_Unpacker;
+  f.params = const_cast<GSL::FunctionObject*>(&func);
+  f.function = &GSL::callFunctionFromObject;
 
   // set up solver
   gsl_root_fsolver* solver = gsl_root_fsolver_alloc(gsl_root_fsolver_brent);
@@ -57,7 +57,7 @@ double gslBrent(const GslFunction& func, const double xa, const double xb,
 }
 
 
-double gslQuadratureAG(const GslFunction& func, const double xi, const double xf,
+double GSL::integrate(const GSL::FunctionObject& func, const double xi, const double xf,
     const double eps_abs, const double eps_rel)
 {
   double result = 0.0;
@@ -68,8 +68,8 @@ double gslQuadratureAG(const GslFunction& func, const double xi, const double xf
   gsl_integration_workspace* ws = gsl_integration_workspace_alloc(max_intervals);
   {
     gsl_function f;
-    f.params = const_cast<GslFunction*>(&func);
-    f.function = &GslFunction_Unpacker;
+    f.params = const_cast<GSL::FunctionObject*>(&func);
+    f.function = &GSL::callFunctionFromObject;
     gsl_integration_qag(&f, xi, xf, eps_abs, eps_rel,
         max_intervals, GSL_INTEG_GAUSS21, ws,
         &result, &abs_err);

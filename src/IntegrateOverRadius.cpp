@@ -19,7 +19,7 @@ namespace {
     return RadialFunction(f.radii, weighted);
   }
 
-  class RadialInterpFunction : public GslFunction {
+  class RadialInterpFunction : public GSL::FunctionObject {
     gsl_interp_accel* acc;
     gsl_spline* spline;
     public:
@@ -59,6 +59,6 @@ double integrateOverRadius(const RadialFunction& input) {
   const double r_max = integrand.radii.back();
   const double eps_abs = 1.0e-6;
   const double eps_rel = eps_abs;
-  return gslQuadratureAG(interp_integrand, r_min, r_max, eps_abs, eps_rel);
+  return GSL::integrate(interp_integrand, r_min, r_max, eps_abs, eps_rel);
 }
 

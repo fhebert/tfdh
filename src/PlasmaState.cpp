@@ -30,7 +30,7 @@ namespace {
     return result;
   }
 
-  class ChiFunction : public GslFunction {
+  class ChiFunction : public GSL::FunctionObject {
     const double ne_target_;
     const double kt_;
     const double tau_;
@@ -63,7 +63,7 @@ namespace {
 
     // find the root
     const double chi_eps = std::numeric_limits<double>::epsilon();
-    return gslBrent(func, chiA, chiB, chi_eps);
+    return GSL::findRoot(func, chiA, chiB, chi_eps);
   }
 
 } // helper namespace
