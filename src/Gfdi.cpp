@@ -64,7 +64,6 @@ namespace {
 
 
 double gfdi(const GFDI order, const double chi, const double tau) {
-  // TODO: something more like a SpEC require?
   assert(tau <= 100. && "GFDI: outside of known convergence region");
 
   const int k = static_cast<int>(order);
