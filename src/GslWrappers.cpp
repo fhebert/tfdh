@@ -8,9 +8,12 @@
 #include <gsl/gsl_roots.h>
 
 
-double GSL::callFunctionFromObject(const double x, void *params) {
-  const GSL::FunctionObject* object = static_cast<const GSL::FunctionObject*>(params);
-  return object->f(x);
+namespace {
+  // TODO: documentation for the cleverness
+  double callFunctionFromObject(const double x, void *params) {
+    const GSL::FunctionObject* object = static_cast<const GSL::FunctionObject*>(params);
+    return object->f(x);
+  }
 }
 
 
@@ -33,7 +36,7 @@ double GSL::findRoot(const GSL::FunctionObject& func, const double xa, const dou
   //     in this sense it is "unpacking" the object.
   gsl_function f;
   f.params = const_cast<GSL::FunctionObject*>(&func);
-  f.function = &GSL::callFunctionFromObject;
+  f.function = &callFunctionFromObject;
 
   // set up solver
   gsl_root_fsolver* solver = gsl_root_fsolver_alloc(gsl_root_fsolver_brent);
@@ -69,7 +72,7 @@ double GSL::integrate(const GSL::FunctionObject& func, const double xi, const do
   {
     gsl_function f;
     f.params = const_cast<GSL::FunctionObject*>(&func);
-    f.function = &GSL::callFunctionFromObject;
+    f.function = &callFunctionFromObject;
     gsl_integration_qag(&f, xi, xf, eps_abs, eps_rel,
         max_intervals, GSL_INTEG_GAUSS21, ws,
         &result, &abs_err);

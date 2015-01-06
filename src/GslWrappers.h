@@ -14,10 +14,6 @@ namespace GSL {
       virtual double f(double x) const = 0;
   };
 
-  // helper function
-  // TODO: documentation for the cleverness
-  double callFunctionFromObject(double x, void *params);
-
 
   // object to wrap a GSL ODE integrator
   // implements an adaptive stepper
