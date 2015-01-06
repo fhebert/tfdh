@@ -20,21 +20,22 @@ namespace {
   }
 
   class RadialInterpFunction : public GSL::FunctionObject {
-    gsl_interp_accel* acc;
-    gsl_spline* spline;
+    private:
+      gsl_interp_accel* acc;
+      gsl_spline* spline;
     public:
-    RadialInterpFunction(const RadialFunction& f) {
-      acc = gsl_interp_accel_alloc();
-      spline = gsl_spline_alloc(gsl_interp_cspline, f.radii.size());
-      gsl_spline_init(spline, f.radii.data(), f.data.data(), f.radii.size());
-    }
-    ~RadialInterpFunction() {
-      gsl_spline_free(spline);
-      gsl_interp_accel_free(acc);
-    }
-    double operator()(double x) const {
-      return gsl_spline_eval(spline, x, acc);
-    }
+      RadialInterpFunction(const RadialFunction& f) {
+        acc = gsl_interp_accel_alloc();
+        spline = gsl_spline_alloc(gsl_interp_cspline, f.radii.size());
+        gsl_spline_init(spline, f.radii.data(), f.data.data(), f.radii.size());
+      }
+      ~RadialInterpFunction() {
+        gsl_spline_free(spline);
+        gsl_interp_accel_free(acc);
+      }
+      double operator()(double x) const {
+        return gsl_spline_eval(spline, x, acc);
+      }
   };
 }
 
@@ -46,6 +47,7 @@ double integrateOverRadius(const RadialFunction& input) {
   const RadialFunction integrand = weighByVolumeElement(input);
 
   // construct a GSL cubic spline approximation to the data
+  // TODO: see if GSL intefacing can be cleaned up
   RadialInterpFunction interp_integrand(integrand);
 
   // perform integration with GSL calls
