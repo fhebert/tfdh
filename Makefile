@@ -29,7 +29,7 @@ tests: $(OBJS) | bin
 build/%.o: src/%.cpp | build
 	@ echo "  CXX       $*.cpp"
 	@ $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/$*.cpp -o build/$*.o
-	@ $(CXX) $(CPPFLAGS) src/$*.cpp -MM -MF build/$*.d.preprocess
+	@ $(CXX) $(CPPFLAGS) $(CXXFLAGS) src/$*.cpp -MM -MF build/$*.d.preprocess
 	@ sed -e 's|.*:|build/$*.o:|' < build/$*.d.preprocess > build/$*.d
 	@ $(RM) build/$*.d.preprocess
 
