@@ -9,20 +9,19 @@
 
 #include <cmath>
 
-#include <iostream>
 
 namespace {
 
   class FermiDiracDistribution : public GSL::FunctionObject {
-    const double xi;
-    const PlasmaState p;
+    private:
+      const double xi;
+      const PlasmaState p;
     public:
-    FermiDiracDistribution(const double xi, const PlasmaState& p)
-      : xi(xi), p(p) {}
-    double operator()(const double x) const {
-      const double val = (1 + p.tau*x) * sqrt(x + p.tau * x*x/2.0) / (1.0 + exp(x-p.chi-xi));
-      return val;
-    }
+      FermiDiracDistribution(const double xi, const PlasmaState& p) : xi(xi), p(p) {}
+      double operator()(const double x) const {
+        const double val = (1.0 + p.tau*x) * sqrt(x + p.tau * x*x/2.0) / (1.0 + exp(x-p.chi-xi));
+        return val;
+      }
   };
 
   double boundFermiDiracIntegral(const double xi, const PlasmaState& p) {
