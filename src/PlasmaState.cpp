@@ -30,40 +30,40 @@ namespace {
     return result;
   }
 
-  class ChiFunction : public GSL::FunctionObject {
-    const double ne_target_;
-    const double kt_;
-    const double tau_;
+  class NeErrorFromChi : public GSL::FunctionObject {
+    private:
+      const double ne0, kt, tau;
     public:
-    ChiFunction(const double ne_t, const double kt, const double tau)
-      : ne_target_(ne_t), kt_(kt), tau_(tau) {}
-    double operator()(const double chi) const {
-      // argument phi = 0 in this rootfind
-      return ne_target_ - Plasma::ne(chi, 0.0, kt_, tau_);
-    }
+      NeErrorFromChi(const double ne, const double kt, const double tau)
+        : ne0(ne), kt(kt), tau(tau) {}
+      double operator()(const double chi) const {
+        // argument phi = 0
+        return Plasma::ne(chi, 0.0, kt, tau) - ne0;
+      }
   };
 
   double invertForChi(const double ne, const double kt, const double tau) {
-    // start by initializing some values
-    const ChiFunction func(ne, kt, tau);
+    // function to find root of:
+    const NeErrorFromChi deltaNe(ne, kt, tau);
 
     // find a chi interval which brackets the root
-    // ne(chi) is an INCREASING function, so ChiFunction(chi) is DECREASING
     double chiA = 0;
-    double deltaA = func(chiA);
+    double deltaA = deltaNe(chiA);
     if (deltaA == 0.0) return chiA;
-    double chiB = (deltaA > 0) - (deltaA < 0); // this is the sign operator
-    double deltaB = func(chiB);
+    // ne(chi) is an INCREASING function, so deltaNe(chi) is too
+    const double signA = (deltaA > 0) - (deltaA < 0);
+    double chiB = - signA;
+    double deltaB = deltaNe(chiB);
     while (deltaA*deltaB > 0.0) {
       chiA = chiB;
       deltaA = deltaB;
       chiB = 2*chiB;
-      deltaB = func(chiB);
+      deltaB = deltaNe(chiB);
     }
 
     // find the root
     const double chi_eps = std::numeric_limits<double>::epsilon();
-    return GSL::findRoot(func, chiA, chiB, chi_eps);
+    return GSL::findRoot(deltaNe, chiA, chiB, chi_eps);
   }
 
 } // helper namespace
