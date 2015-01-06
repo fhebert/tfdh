@@ -3,6 +3,7 @@
 #define TFDH_RADIAL_FUNCTION_H
 
 #include <cassert>
+#include <string>
 #include <vector>
 
 
