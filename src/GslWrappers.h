@@ -10,8 +10,7 @@ namespace GSL {
   // member variables of the derived classes.
   class FunctionObject {
     public:
-      virtual ~FunctionObject() = default;
-      virtual double f(double x) const = 0;
+      virtual double operator()(double x) const = 0;
   };
 
 

@@ -37,7 +37,7 @@ namespace {
     public:
     ChiFunction(const double ne_t, const double kt, const double tau)
       : ne_target_(ne_t), kt_(kt), tau_(tau) {}
-    double f(const double chi) const {
+    double operator()(const double chi) const {
       // argument phi = 0 in this rootfind
       return ne_target_ - Plasma::ne(chi, 0.0, kt_, tau_);
     }
@@ -50,15 +50,15 @@ namespace {
     // find a chi interval which brackets the root
     // ne(chi) is an INCREASING function, so ChiFunction(chi) is DECREASING
     double chiA = 0;
-    double deltaA = func.f(chiA);
+    double deltaA = func(chiA);
     if (deltaA == 0.0) return chiA;
     double chiB = (deltaA > 0) - (deltaA < 0); // this is the sign operator
-    double deltaB = func.f(chiB);
+    double deltaB = func(chiB);
     while (deltaA*deltaB > 0.0) {
       chiA = chiB;
       deltaA = deltaB;
       chiB = 2*chiB;
-      deltaB = func.f(chiB);
+      deltaB = func(chiB);
     }
 
     // find the root

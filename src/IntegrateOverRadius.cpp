@@ -32,7 +32,7 @@ namespace {
       gsl_spline_free(spline);
       gsl_interp_accel_free(acc);
     }
-    double f(double x) const {
+    double operator()(double x) const {
       return gsl_spline_eval(spline, x, acc);
     }
   };

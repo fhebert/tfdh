@@ -12,7 +12,7 @@ namespace {
   // TODO: documentation for the cleverness
   double callFunctionFromObject(const double x, void *params) {
     const GSL::FunctionObject* object = static_cast<const GSL::FunctionObject*>(params);
-    return object->f(x);
+    return (*object)(x);
   }
 }
 
