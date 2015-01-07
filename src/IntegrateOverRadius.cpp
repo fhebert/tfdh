@@ -47,11 +47,10 @@ double integrateOverRadius(const RadialFunction& input) {
   const RadialFunction integrand = weighByVolumeElement(input);
 
   // construct a GSL cubic spline approximation to the data
-  // TODO: see if GSL intefacing can be cleaned up
+  // TODO: see if GSL interfacing can be cleaned up
   RadialInterpFunction interp_integrand(integrand);
 
   // perform integration with GSL calls
-  // use simplest non-adaptive GSL algorithm until a need for more arises
   // TODO:
   //   consider other algorithm possibilities:
   //   1- use the spline's exact integral
