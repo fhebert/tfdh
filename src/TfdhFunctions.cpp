@@ -32,20 +32,18 @@ namespace {
 
 }
 
+
 double TFDH::neBound(const double phi, const PlasmaState& p)
 {
   const double xi = phi/p.kt;
-  // TODO: check these conditions!
   if (xi < 0) {
     return 0;
-  } else if (xi > 1.e4*(1+fabs(p.chi))) {
-    // xi very large => definite integral approaches indefinite integral
-    return Plasma::ne(phi, p);
   } else {
     const double& NePrefactor = PhysicalConstantsCGS::NePrefactor;
     return NePrefactor * pow(p.kt, 1.5) * boundFermiDiracIntegral(xi, p);
   }
 }
+
 
 RadialFunction TFDH::neBound(const RadialFunction& tfdh, const PlasmaState& p)
 {
