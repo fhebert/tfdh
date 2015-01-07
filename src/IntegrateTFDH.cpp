@@ -15,6 +15,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_odeiv2.h>
 
+#include <iostream>
 
 namespace {
 
@@ -39,15 +40,14 @@ namespace {
 
 RadialFunction TFDH::solve(const Element& e, const PlasmaState& p)
 {
-  // set parameters here:
+  // ODE integration bounds
   const double rws = Plasma::radiusWignerSeitz(e,p);
-  const double ri = 1e-5 * rws;
-  // TODO: large outer radius set to avoid assert failures when rootfinding
-  //       for the central potential. this means we're no longer checking that
-  //       rf < rws
-  //       should add this check back in somewhere
+  const double ri = 1e-4 * rws;
   const double rf = 1e3 * rws;
 
+  // NOTE: with this setup, the "correct" ODE is integrated twice -- first while
+  // finding the correct potential, then again using the correct potential.
+  // this should be a negligible cost, but could be optimized away if need be.
   const double dv0 = findPotentialRoot(e, p, ri, rf);
   return integrateODE(e, p, ri, rf, dv0);
 }
@@ -82,6 +82,7 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
     potentials.push_back(qe*solution[0]/r);
     if (solution[0] <= 0 or (solution[1]-solution[0])/r > 0) break;
   }
+  std::cout << " r = " << r << ",  r_final = " << r_final << "\n";
   assert(r < r_final and "integrated ODE until final radius without terminating!");
 
   gsl_odeiv2_evolve_free(ev);
@@ -133,8 +134,6 @@ double TFDH::findPotentialRoot(const Element& e, const PlasmaState& p,
     assert(success and "failed to find potential root within bracket");
   }
 
-  // TODO: return the corresponding RadialFunction, to avoid computing it
-  //       a second time!
   return v_mid;
 }
 
