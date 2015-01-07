@@ -15,7 +15,6 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_odeiv2.h>
 
-#include <iostream>
 
 namespace {
 
@@ -82,7 +81,6 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
     potentials.push_back(qe*solution[0]/r);
     if (solution[0] <= 0 or (solution[1]-solution[0])/r > 0) break;
   }
-  std::cout << " r = " << r << ",  r_final = " << r_final << "\n";
   assert(r < r_final and "integrated ODE until final radius without terminating!");
 
   gsl_odeiv2_evolve_free(ev);
