@@ -2,10 +2,10 @@
 
 #include "Element.h"
 #include "Composition.h"
-#include "IntegrateTFDH.h"
 #include "PlasmaState.h"
 #include "PhysicalConstants.h"
 #include "RadialFunction.h"
+#include "TfdhOdeSolve.h"
 
 #include <string>
 #include <iostream>

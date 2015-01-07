@@ -1,6 +1,6 @@
 
-#ifndef TFDH_INTEGRATE_TFDH_HPP
-#define TFDH_INTEGRATE_TFDH_HPP
+#ifndef TFDH_ODE_SOLVE_HPP
+#define TFDH_ODE_SOLVE_HPP
 
 struct Element;
 struct PlasmaState;
@@ -16,4 +16,4 @@ namespace TFDH {
   double boundElectrons(const Element& e, const PlasmaState& p);
 };
 
-#endif // TFDH_INTEGRATE_TFDH_HPP
+#endif // TFDH_ODE_SOLVE_HPP

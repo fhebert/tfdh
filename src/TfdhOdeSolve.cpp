@@ -1,5 +1,5 @@
 
-#include "IntegrateTFDH.h"
+#include "TfdhOdeSolve.h"
 
 #include "Element.h"
 #include "IntegrateOverRadius.h"
