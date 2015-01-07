@@ -69,11 +69,6 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
   gsl_odeiv2_control* ctrl = gsl_odeiv2_control_y_new(eps_abs, eps_rel);
   gsl_odeiv2_evolve* ev = gsl_odeiv2_evolve_alloc(dim);
   gsl_odeiv2_system sys = {tfdhOde, nullptr, dim, &params};
-  // TODO: use c++11 smart pointers, e.g. as below:
-  //std::unique_ptr<gsl_odeiv2_driver, void(*) (gsl_odeiv2_driver*)> dd(
-  //    gsl_odeiv2_driver_alloc_y_new(&sys, gsl_odeiv2_step_rk8pd, dr_start,
-  //      eps_abs, eps_rel),
-  //    gsl_odeiv2_driver_free);
 
   // TODO: fix units. too many quanities: solution / phi / xi / ...
   std::vector<double> radii, potentials;
