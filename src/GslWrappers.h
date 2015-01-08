@@ -16,6 +16,7 @@ namespace GSL {
   // a lambda with the gsl_function interface.
   class FunctionObject {
     public:
+      virtual ~FunctionObject() = default;
       virtual double operator()(double x) const = 0;
   };
 
