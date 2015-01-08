@@ -8,7 +8,6 @@
 #include <gsl/gsl_spline.h>
 
 
-// helpers
 namespace {
 
   RadialFunction weighByVolumeElement(const RadialFunction& f) {
@@ -37,8 +36,7 @@ namespace {
         return gsl_spline_eval(spline, x, acc);
       }
   };
-}
-
+} // helper namespace
 
 
 double integrateOverRadius(const RadialFunction& input) {

@@ -5,6 +5,7 @@
 struct PlasmaState;
 struct RadialFunction;
 
+
 namespace TFDH {
 
   double neBound(double phi, const PlasmaState& p);

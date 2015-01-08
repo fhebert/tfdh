@@ -30,7 +30,6 @@ double Plasma::ne(const double phi, const PlasmaState& p) {
 }
 
 
-
 std::vector<double> Plasma::ni(const double phi, const PlasmaState& p) {
   const double xi = (phi >= 0.0) ? phi/p.kt : 0.0;
   std::vector<double> nis(p.ni);

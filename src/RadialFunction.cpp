@@ -18,4 +18,3 @@ int writeToFile(const RadialFunction& rf, const std::string& filename)
   return 0;
 }
 
-

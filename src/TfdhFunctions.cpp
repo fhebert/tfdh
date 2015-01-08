@@ -54,4 +54,3 @@ RadialFunction TFDH::neBound(const RadialFunction& tfdh, const PlasmaState& p)
   return RadialFunction(tfdh.radii, nebs);
 }
 
-
