@@ -5,6 +5,7 @@
 #include "PlasmaState.h"
 #include "PhysicalConstants.h"
 #include "RadialFunction.h"
+#include "TfdhFunctions.h"
 #include "TfdhOdeSolve.h"
 
 #include <string>
@@ -42,10 +43,9 @@ int main() {
   for (double ni : ps.ni)
     std::cout << "plasma ni = " << ni << "\n";
 
-  //const RadialFunction tfdh = TFDH::solve(Elements::Fe56, ps);
-  //writeToFile(tfdh, "test_data.dat");
+  const RadialFunction tfdh = TFDH::solve(Elements::Fe56, ps);
+  const double bound_electrons = TFDH::boundElectrons(tfdh, ps);
 
-  const double bound_electrons = TFDH::boundElectrons(Elements::Fe56, ps);
   std::cout << "number of bound electrons = " << bound_electrons << "\n";
   std::cout << "=> effective Z_net = " << Elements::Fe56.Z - bound_electrons << "\n";
 

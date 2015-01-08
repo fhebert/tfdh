@@ -15,8 +15,6 @@ namespace TFDH {
   double findPotentialRoot(const Element& e, const PlasmaState& p,
       double r_init, double r_final);
 
-  double boundElectrons(const Element& e, const PlasmaState& p);
-
 };
 
 

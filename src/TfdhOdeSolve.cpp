@@ -2,12 +2,10 @@
 #include "TfdhOdeSolve.h"
 
 #include "Element.h"
-#include "IntegrateOverRadius.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
 #include "PhysicalConstants.h"
 #include "RadialFunction.h"
-#include "TfdhFunctions.h"
 
 #include <cassert>
 #include <cmath>
@@ -135,10 +133,3 @@ double TFDH::findPotentialRoot(const Element& e, const PlasmaState& p,
   return v_mid;
 }
 
-
-double TFDH::boundElectrons(const Element& e, const PlasmaState& p)
-{
-  const RadialFunction& tfdh = solve(e, p);
-  const RadialFunction& neBound = TFDH::neBound(tfdh, p);
-  return integrateOverRadius(neBound);
-}

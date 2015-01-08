@@ -11,6 +11,8 @@ namespace TFDH {
   double neBound(double phi, const PlasmaState& p);
   RadialFunction neBound(const RadialFunction& tfdh, const PlasmaState& p);
 
+  double boundElectrons(const RadialFunction& tfdh, const PlasmaState& p);
+
 }
 
 

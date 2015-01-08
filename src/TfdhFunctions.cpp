@@ -2,6 +2,7 @@
 #include "TfdhFunctions.h"
 
 #include "GslWrappers.h"
+#include "IntegrateOverRadius.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
 #include "PhysicalConstants.h"
@@ -54,3 +55,9 @@ RadialFunction TFDH::neBound(const RadialFunction& tfdh, const PlasmaState& p)
   return RadialFunction(tfdh.radii, nebs);
 }
 
+
+double TFDH::boundElectrons(const RadialFunction& tfdh, const PlasmaState& p)
+{
+  const RadialFunction& neBound = TFDH::neBound(tfdh, p);
+  return integrateOverRadius(neBound);
+}
