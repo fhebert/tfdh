@@ -15,7 +15,7 @@ namespace TFDH {
   double findPotentialRoot(const Element& e, const PlasmaState& p,
       double r_init, double r_final);
 
-};
+}
 
 
 #endif // TFDH_ODE_SOLVE_HPP
