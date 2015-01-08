@@ -14,7 +14,7 @@ namespace {
     for (const Abundance& a : abundances) {
       // NOTE: This math assumes a totally ionized plasma, otherwise need to
       // multiply each term in the sum by the ionization fraction.
-      inv_mu_e += a.massFraction * a.element.Z / (double) a.element.A;
+      inv_mu_e += a.massFraction * a.element.Z / static_cast<double>(a.element.A);
     }
     return 1.0/inv_mu_e;
   }
@@ -24,7 +24,7 @@ namespace {
 
 Composition::Composition(const Element& element)
 : abundances(std::vector<Abundance>(1, Abundance(1.0, element))),
-  meanMolecularWeightPerElectron(element.Z / (double) element.A)
+  meanMolecularWeightPerElectron(element.Z / static_cast<double>(element.A))
 {}
 
 Composition::Composition(const std::vector<Abundance>& abundances)
