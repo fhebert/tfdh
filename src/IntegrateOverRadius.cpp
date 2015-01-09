@@ -5,7 +5,6 @@
 #include "RadialFunction.h"
 
 #include <cmath>
-#include <gsl/gsl_spline.h>
 
 
 namespace {
@@ -20,20 +19,11 @@ namespace {
 
   class RadialInterpFunction : public GSL::FunctionObject {
     private:
-      gsl_interp_accel* acc;
-      gsl_spline* spline;
+      GSL::Spline spline;
     public:
-      RadialInterpFunction(const RadialFunction& f) {
-        acc = gsl_interp_accel_alloc();
-        spline = gsl_spline_alloc(gsl_interp_cspline, f.radii.size());
-        gsl_spline_init(spline, f.radii.data(), f.data.data(), f.radii.size());
-      }
-      ~RadialInterpFunction() {
-        gsl_spline_free(spline);
-        gsl_interp_accel_free(acc);
-      }
+      RadialInterpFunction(const RadialFunction& f) : spline(f) {}
       double operator()(double x) const {
-        return gsl_spline_eval(spline, x, acc);
+        return spline.eval(x);
       }
   };
 } // helper namespace
