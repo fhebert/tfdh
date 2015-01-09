@@ -2,8 +2,24 @@
 #ifndef TFDH_GSL_WRAPPERS_H
 #define TFDH_GSL_WRAPPERS_H
 
+#include <gsl/gsl_spline.h>
+
+struct RadialFunction;
+
 
 namespace GSL {
+
+  // simple wrapper around GSL splines
+  class Spline {
+    private:
+      gsl_interp_accel* acc;
+      gsl_spline* spline;
+    public:
+      Spline(const RadialFunction& data);
+      ~Spline();
+      double eval(double r) const;
+  };
+
 
   // simple base class to help interfacing with gsl_function.
   //

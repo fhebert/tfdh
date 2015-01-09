@@ -1,5 +1,6 @@
 
 #include "GslWrappers.h"
+#include "RadialFunction.h"
 
 #include <cassert>
 #include <gsl/gsl_errno.h>
@@ -20,6 +21,27 @@ namespace {
     const GSL::FunctionObject* func = static_cast<const GSL::FunctionObject*>(params);
     return (*func)(x);
   }
+}
+
+
+GSL::Spline::Spline(const RadialFunction& f)
+: acc(gsl_interp_accel_alloc()),
+  spline(gsl_spline_alloc(gsl_interp_cspline, f.radii.size()))
+{
+  gsl_spline_init(spline, f.radii.data(), f.data.data(), f.radii.size());
+}
+
+
+GSL::Spline::~Spline()
+{
+  gsl_spline_free(spline);
+  gsl_interp_accel_free(acc);
+}
+
+
+double GSL::Spline::eval(const double r) const
+{
+  return gsl_spline_eval(spline, r, acc);
 }
 
 
