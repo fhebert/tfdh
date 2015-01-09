@@ -1,6 +1,6 @@
 
 CXX := clang++
-CPPFLAGS := -DDEBUG
+CPPFLAGS :=
 CXXFLAGS := -O3 -Wall -Wextra -std=c++11 -march=native
 LIBS = -lm -lgsl
 
