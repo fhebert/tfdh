@@ -24,7 +24,7 @@ namespace {
 
 
 double GSL::findRoot(const GSL::FunctionObject& func, const double xa, const double xb,
-    const double dx_abs)
+    const double eps_abs, const double eps_rel)
 {
   // check that interval is properly set up, and brackets the root
   assert(xa < xb);
@@ -39,14 +39,13 @@ double GSL::findRoot(const GSL::FunctionObject& func, const double xa, const dou
   gsl_root_fsolver_set(solver, &f, xa, xb);
 
   // iterate
-  const int max_iter = 200;
-  const double dx_rel = dx_abs; // will give smallest resolvable relative dx
+  const int max_iter = 80;
   int status = GSL_CONTINUE;
   for (int iter=0; (status==GSL_CONTINUE) and (iter<max_iter); ++iter) {
     status = gsl_root_fsolver_iterate(solver);
     const double xlo = gsl_root_fsolver_x_lower(solver);
     const double xhi = gsl_root_fsolver_x_upper(solver);
-    status = gsl_root_test_interval(xlo, xhi, dx_abs, dx_rel);
+    status = gsl_root_test_interval(xlo, xhi, eps_abs, eps_rel);
   }
   assert(status==GSL_SUCCESS);
 

@@ -24,7 +24,7 @@ namespace GSL {
   // interval (x1,x2) MUST bracket a root and x1<x2
   // implemented using GSL's Brent rootfinder method
   double findRoot(const GSL::FunctionObject& func, double x1, double x2,
-      double dx_abs);
+      double eps_abs, double eps_rel);
 
   // definite integral of func from x1 to x2
   // implemented using GSL's adaptive Gauss quadrature

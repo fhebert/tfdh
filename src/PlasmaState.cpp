@@ -62,9 +62,9 @@ namespace {
       deltaB = deltaNe(chiB);
     }
 
-    // find the root
-    const double chi_eps = std::numeric_limits<double>::epsilon();
-    return GSL::findRoot(deltaNe, chiA, chiB, chi_eps);
+    // find the root -- for this shooting problem we need max accuracy
+    const double eps = std::numeric_limits<double>::epsilon();
+    return GSL::findRoot(deltaNe, chiA, chiB, eps, eps);
   }
 
 } // helper namespace
