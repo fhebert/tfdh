@@ -34,8 +34,8 @@ namespace {
     {{1.2558461, 3.2070406, 6.1239082, 10.316126, 16.597079}}}};
 
 
-  inline double cube(const double x) {
-    return x*x*x;
+  inline double cube(const double a) {
+    return a*a*a;
   }
 
   // helper function for GFDI work
@@ -70,7 +70,7 @@ double gfdi(const GFDI order, const double chi, const double tau) {
 
   if (chi <= 0.6) {
     double value = 0;
-    for (int i=1; i<=5; ++i) {
+    for (size_t i=1; i<=5; ++i) {
       value += c[k][i-1] * sqrt(1 + khi[k][i-1]*tau/2) /
         (exp(-khi[k][i-1]) + exp(-chi));
     }
@@ -78,7 +78,7 @@ double gfdi(const GFDI order, const double chi, const double tau) {
   }
   else if (chi < 14.0) {
     double value = 0;
-    for (int i=1; i<=5; ++i) {
+    for (size_t i=1; i<=5; ++i) {
       value += h[i-1] * pow(x[i-1], k) * pow(chi, k+3./2)
         * sqrt(1 + chi*x[i-1]*tau/2) / (1 + exp(chi*(x[i-1] - 1)))
         + v[i-1] * pow(xi[i-1] + chi, k+1./2) * sqrt(1 + (xi[i-1] + chi)*tau/2);
