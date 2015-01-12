@@ -37,7 +37,7 @@ namespace GSL {
   };
 
   // find a root of func in the interval x1 to x2
-  // interval (x1,x2) MUST bracket a root and x1<x2
+  // one of (x1,x2) or (x2,x1) MUST bracket a root
   // implemented using GSL's Brent rootfinder method
   double findRoot(const GSL::FunctionObject& func, double x1, double x2,
       double eps_abs, double eps_rel);

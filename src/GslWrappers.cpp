@@ -48,9 +48,9 @@ double GSL::Spline::eval(const double r) const
 double GSL::findRoot(const GSL::FunctionObject& func, const double xa, const double xb,
     const double eps_abs, const double eps_rel)
 {
-  // check that interval is properly set up, and brackets the root
-  assert(xa < xb);
+  // check that interval brackets the root
   assert(func(xa)*func(xb) <= 0);
+  if (xa==xb) return xa;
 
   // set up solver
   gsl_function f;
@@ -58,7 +58,7 @@ double GSL::findRoot(const GSL::FunctionObject& func, const double xa, const dou
   f.function = &callFunctionFromObject;
 
   gsl_root_fsolver* solver = gsl_root_fsolver_alloc(gsl_root_fsolver_brent);
-  gsl_root_fsolver_set(solver, &f, xa, xb);
+  gsl_root_fsolver_set(solver, &f, fmin(xa,xb), fmax(xa,xb));
 
   // iterate
   const int max_iter = 80;
