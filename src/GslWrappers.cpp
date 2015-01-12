@@ -8,6 +8,8 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_roots.h>
 
+#include <iostream>
+
 
 namespace {
   // free function to interface between the gsl_function interface and the
@@ -73,6 +75,7 @@ double GSL::findRoot(const GSL::FunctionObject& func, const double xa, const dou
 
   const double result = gsl_root_fsolver_root(solver);
   gsl_root_fsolver_free(solver);
+  std::cout << "GSL::findRoot found root = " << result << ",  with eps_abs = " << eps_abs << ", and eps_rel = " << eps_rel << "\n";
   return result;
 }
 
