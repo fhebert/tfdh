@@ -2,14 +2,16 @@
 
 #include "Element.h"
 #include "Composition.h"
+#include "PlasmaFunctions.h"
 #include "PlasmaState.h"
 #include "PhysicalConstants.h"
 #include "RadialFunction.h"
 #include "TfdhFunctions.h"
 #include "TfdhOdeSolve.h"
 
-#include <string>
 #include <iostream>
+#include <string>
+#include <vector>
 
 
 
@@ -48,6 +50,14 @@ int main() {
 
   std::cout << "number of bound electrons = " << bound_electrons << "\n";
   std::cout << "=> effective Z_net = " << Elements::Fe56.Z - bound_electrons << "\n";
+
+  const std::vector<double> rexs = TFDH::exclusionRadii(tfdh, Elements::Fe56, ps);
+  const double rws = Plasma::radiusWignerSeitz(Elements::Fe56, ps);
+  const double scale = 26/PhysicalConstantsCGS::BohrRadius;
+
+  std::cout << "rws = " << rws << ", rws*Ztr/a0 = " << rws*scale << "\n";
+  for (double rex : rexs)
+    std::cout << "rex = " << rex << ", rex*Ztr/a0 = " << rex*scale << "\n";
 
   return 0;
 }
