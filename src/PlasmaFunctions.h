@@ -16,6 +16,8 @@ namespace Plasma {
   double ne(double chi, double xi, double kt, double tau);
   double ne(double phi, const PlasmaState& p);
 
+  double neBound(double phi, const PlasmaState& p);
+
   std::vector<double> ni(double phi, const PlasmaState& p);
   double totalIonChargeDensity(double phi, const PlasmaState& p);
 

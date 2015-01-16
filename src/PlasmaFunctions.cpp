@@ -4,10 +4,27 @@
 #include "Composition.h"
 #include "Element.h"
 #include "Gfdi.h"
+#include "GslWrappers.h"
 #include "PhysicalConstants.h"
 #include "PlasmaState.h"
 
 #include <cmath>
+
+
+namespace {
+  class FermiDiracDistribution : public GSL::FunctionObject {
+    private:
+      const double xi;
+      const PlasmaState p;
+    public:
+      FermiDiracDistribution(const double xi, const PlasmaState& p) : xi(xi), p(p) {}
+      double operator()(const double x) const {
+        const double val = (1.0 + p.tau*x) * sqrt(x + p.tau * x*x/2.0) / (1.0 + exp(x-p.chi-xi));
+        return val;
+      }
+  };
+}
+
 
 
 double Plasma::rhoFromNe(const double ne, const Composition& comp) {
@@ -27,6 +44,19 @@ double Plasma::ne(const double chi, const double xi, const double kt,
 
 double Plasma::ne(const double phi, const PlasmaState& p) {
   return ne(p.chi, phi/p.kt, p.kt, p.tau);
+}
+
+
+double Plasma::neBound(const double phi, const PlasmaState& p) {
+  const double xi = phi/p.kt;
+  if (xi < 0) {
+    return 0;
+  } else {
+    const double& NePrefactor = PhysicalConstantsCGS::NePrefactor;
+    FermiDiracDistribution fd(xi, p);
+    const double eps = 1.e-6;
+    return NePrefactor * pow(p.kt, 1.5) * GSL::integrate(fd, 0, xi, eps, eps);
+  }
 }
 
 
