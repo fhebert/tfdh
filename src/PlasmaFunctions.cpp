@@ -60,6 +60,15 @@ double Plasma::neBound(const double phi, const PlasmaState& p) {
 }
 
 
+double Plasma::neKinetic(const double phi, const PlasmaState& p) {
+  const double xi = fmax(0, phi/p.kt);
+  const double i32 = gfdi(GFDI::Order32, p.chi+xi, p.tau);
+  const double i52 = gfdi(GFDI::Order52, p.chi+xi, p.tau);
+  const double& NePrefactor = PhysicalConstantsCGS::NePrefactor;
+  return NePrefactor * pow(p.kt, 2.5) * (i32 + p.tau*i52);
+}
+
+
 std::vector<double> Plasma::ni(const double phi, const PlasmaState& p) {
   const double xi = (phi >= 0.0) ? phi/p.kt : 0.0;
   std::vector<double> nis(p.ni);
