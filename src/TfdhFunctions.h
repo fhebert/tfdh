@@ -2,6 +2,7 @@
 #ifndef TFDH_TFDH_FUNCTIONS_H
 #define TFDH_TFDH_FUNCTIONS_H
 
+#include <array>
 #include <vector>
 
 struct Element;
@@ -14,6 +15,9 @@ namespace TFDH {
   double boundElectrons(const RadialFunction& tfdh, const PlasmaState& p);
   std::vector<double> exclusionRadii(const RadialFunction& tfdh,
       const Element& e, const PlasmaState& p);
+
+  double embeddingEnergy(const RadialFunction& tfdh, const PlasmaState& p,
+      const Element& e);
 
 }
 

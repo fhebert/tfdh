@@ -59,5 +59,7 @@ int main() {
   for (double rex : rexs)
     std::cout << "rex = " << rex << ", rex*Ztr/a0 = " << rex*scale << "\n";
 
+  TFDH::embeddingEnergy(tfdh, ps, Elements::Fe56);
+
   return 0;
 }
