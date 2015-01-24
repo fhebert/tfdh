@@ -13,7 +13,7 @@ namespace Plasma {
 
   double rhoFromNe(double ne, const Composition& comp);
 
-  double ne(double chi, double xi, double kt, double tau);
+  double ne(double chi, double kt, double tau);
   double ne(double phi, const PlasmaState& p);
 
   double neBound(double phi, const PlasmaState& p);

@@ -39,7 +39,7 @@ namespace {
         : ne0(ne), kt(kt), tau(tau) {}
       double operator()(const double chi) const {
         // argument phi = 0
-        return Plasma::ne(chi, 0.0, kt, tau) - ne0;
+        return Plasma::ne(chi, kt, tau) - ne0;
       }
   };
 

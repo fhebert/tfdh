@@ -33,17 +33,16 @@ double Plasma::rhoFromNe(const double ne, const Composition& comp) {
 }
 
 
-double Plasma::ne(const double chi, const double xi, const double kt,
-    const double tau) {
-  const double xiPos = (xi >= 0) ? xi : 0.0;
-  const double i12 = gfdi(GFDI::Order12, chi + xiPos, tau);
-  const double i32 = gfdi(GFDI::Order32, chi + xiPos, tau);
+double Plasma::ne(const double chi, const double kt, const double tau) {
+  const double i12 = gfdi(GFDI::Order12, chi, tau);
+  const double i32 = gfdi(GFDI::Order32, chi, tau);
   const double& NePrefactor = PhysicalConstantsCGS::NePrefactor;
   return NePrefactor * pow(kt, 1.5) * (i12 + tau*i32);
 }
 
 double Plasma::ne(const double phi, const PlasmaState& p) {
-  return ne(p.chi, phi/p.kt, p.kt, p.tau);
+  const double xi = fmax(0, phi/p.kt);
+  return ne(p.chi + xi, p.kt, p.tau);
 }
 
 
