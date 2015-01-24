@@ -19,7 +19,7 @@ namespace Plasma {
   double neBound(double phi, const PlasmaState& p);
 
   // electron kinetic energy density
-  double neKinetic(const double phi, const PlasmaState& p);
+  double neKinetic(double phi, const PlasmaState& p);
 
   std::vector<double> ni(double phi, const PlasmaState& p);
   double totalIonChargeDensity(double phi, const PlasmaState& p);

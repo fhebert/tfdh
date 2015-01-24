@@ -69,7 +69,7 @@ double Plasma::neKinetic(const double phi, const PlasmaState& p) {
 
 
 std::vector<double> Plasma::ni(const double phi, const PlasmaState& p) {
-  const double xi = (phi >= 0.0) ? phi/p.kt : 0.0;
+  const double xi = fmax(0, phi/p.kt);
   std::vector<double> nis(p.ni);
   for (size_t elem=0; elem<nis.size(); ++elem) {
     nis[elem] *= exp(-xi * p.comp.abundances[elem].element.Z);
