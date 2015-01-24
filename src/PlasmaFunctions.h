@@ -16,7 +16,7 @@ namespace Plasma {
   double ne(double chi, double kt, double tau);
   double ne(double phi, const PlasmaState& p);
 
-  double neBound(double phi, const PlasmaState& p);
+  double neBound(double phi, const PlasmaState& p, double cutoff=0);
 
   // electron kinetic energy density
   double neKinetic(double phi, const PlasmaState& p);

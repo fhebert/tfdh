@@ -12,7 +12,7 @@ struct RadialFunction;
 
 namespace TFDH {
 
-  double boundElectrons(const RadialFunction& tfdh, const PlasmaState& p);
+  double boundElectrons(const RadialFunction& tfdh, const PlasmaState& p, double cutoff=0);
   std::vector<double> exclusionRadii(const RadialFunction& tfdh,
       const Element& e, const PlasmaState& p);
 

@@ -46,15 +46,18 @@ double Plasma::ne(const double phi, const PlasmaState& p) {
 }
 
 
-double Plasma::neBound(const double phi, const PlasmaState& p) {
+double Plasma::neBound(const double phi, const PlasmaState& p, const double cutoff) {
   const double xi = phi/p.kt;
-  if (xi < 0) {
-    return 0;
-  } else {
+  // conditions are:
+  // * potential attractive ==> xi > 0
+  // * integration bounds valid ==> (xi-cutoff) > 0
+  if (xi > 0 and xi > cutoff) {
     const double& NePrefactor = PhysicalConstantsCGS::NePrefactor;
     FermiDiracDistribution fd(xi, p);
     const double eps = 1.e-6;
-    return NePrefactor * pow(p.kt, 1.5) * GSL::integrate(fd, 0, xi, eps, eps);
+    return NePrefactor * pow(p.kt, 1.5) * GSL::integrate(fd, 0, xi-cutoff, eps, eps);
+  } else {
+    return 0;
   }
 }
 

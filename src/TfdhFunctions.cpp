@@ -88,11 +88,11 @@ namespace {
 
 
 
-double TFDH::boundElectrons(const RadialFunction& tfdh, const PlasmaState& p)
+double TFDH::boundElectrons(const RadialFunction& tfdh, const PlasmaState& p, const double cutoff)
 {
   std::vector<double> nebs(tfdh.data.size());
   for (size_t i=0; i<nebs.size(); ++i) {
-    nebs[i] = Plasma::neBound(tfdh.data[i], p);
+    nebs[i] = Plasma::neBound(tfdh.data[i], p, cutoff);
   }
   return integrateOverRadius(RadialFunction(tfdh.radii, nebs));
 }
