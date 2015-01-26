@@ -9,6 +9,8 @@
 
 double integrateOverRadius(const RadialFunction& data);
 
+RadialFunction accumulateOverRadius(const RadialFunction& data);
+
 
 #endif // TFDH_RADIAL_INTEGRAL_H
 

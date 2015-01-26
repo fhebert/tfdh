@@ -22,9 +22,7 @@ namespace {
       GSL::Spline spline;
     public:
       RadialInterpFunction(const RadialFunction& f) : spline(f) {}
-      double operator()(double x) const {
-        return spline.eval(x);
-      }
+      double operator()(double x) const {return spline.eval(x);}
   };
 } // helper namespace
 
@@ -49,5 +47,23 @@ double integrateOverRadius(const RadialFunction& input) {
   const double eps_abs = 1.0e-6;
   const double eps_rel = eps_abs;
   return GSL::integrate(interp_integrand, r_min, r_max, eps_abs, eps_rel);
+}
+
+
+// TODO: move this to a proper home
+RadialFunction accumulateOverRadius(const RadialFunction& input) {
+  const RadialFunction integrand = weighByVolumeElement(input);
+  RadialInterpFunction interp_integrand(integrand);
+
+  const double eps_abs = 1.0e-6;
+  const double eps_rel = eps_abs;
+  const double r_min = integrand.radii[0];
+
+  std::vector<double> cumm(input.data.size(), 0);
+  for (size_t i=1; i<cumm.size(); ++i) {
+    const double r_max = integrand.radii[i];
+    cumm[i] = integrate(interp_integrand, r_min, r_max, eps_abs, eps_rel);
+  }
+  return RadialFunction(input.radii, cumm);
 }
 
