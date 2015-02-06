@@ -2,6 +2,7 @@
 #include "PlasmaState.h"
 
 #include "Composition.h"
+#include "Element.h"
 #include "GslWrappers.h"
 #include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"

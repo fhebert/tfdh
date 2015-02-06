@@ -2,10 +2,11 @@
 
 #include "Element.h"
 #include "Composition.h"
+#include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
-#include "PhysicalConstants.h"
 #include "RadialFunction.h"
+#include "Species.h"
 #include "TfdhFunctions.h"
 #include "TfdhOdeSolve.h"
 

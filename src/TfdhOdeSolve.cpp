@@ -2,9 +2,9 @@
 #include "TfdhOdeSolve.h"
 
 #include "Element.h"
+#include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
-#include "PhysicalConstants.h"
 #include "RadialFunction.h"
 
 #include <cassert>

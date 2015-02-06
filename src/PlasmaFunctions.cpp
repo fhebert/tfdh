@@ -7,6 +7,7 @@
 #include "GslWrappers.h"
 #include "PhysicalConstants.h"
 #include "PlasmaState.h"
+#include "Species.h"
 
 #include <cmath>
 

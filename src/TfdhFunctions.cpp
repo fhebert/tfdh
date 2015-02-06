@@ -4,10 +4,11 @@
 #include "Element.h"
 #include "GslWrappers.h"
 #include "IntegrateOverRadius.h"
+#include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
-#include "PhysicalConstants.h"
 #include "RadialFunction.h"
+#include "Species.h"
 
 #include <cmath>
 

@@ -2,10 +2,10 @@
 #ifndef TFDH_COMPOSITION_H
 #define TFDH_COMPOSITION_H
 
-#include "Element.h"
-#include "Species.h"
-
 #include <vector>
+
+struct Element;
+struct Species;
 
 
 struct Composition {
