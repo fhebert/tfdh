@@ -116,7 +116,7 @@ std::vector<double> TFDH::exclusionRadii(const RadialFunction& tfdh,
   const GSL::Spline spline(tfdh);
   std::vector<double> result(p.ni);
   for (size_t elem=0; elem<result.size(); ++elem) {
-    const EnergyDiff delta(p.kt, p.comp.abundances[elem].element.Z, spline);
+    const EnergyDiff delta(p.kt, p.comp.species[elem].element.Z, spline);
     const double eps_abs = 1e-6 * Plasma::radiusWignerSeitz(e, p);
     const double eps_rel = 1e-6;
     result[elem] = GSL::findRoot(delta, tfdh.radii.front(), tfdh.radii.back(), eps_abs, eps_rel);

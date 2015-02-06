@@ -76,7 +76,7 @@ std::vector<double> Plasma::ni(const double phi, const PlasmaState& p) {
   const double xi = fmax(0, phi/p.kt);
   std::vector<double> nis(p.ni);
   for (size_t elem=0; elem<nis.size(); ++elem) {
-    nis[elem] *= exp(-xi * p.comp.abundances[elem].element.Z);
+    nis[elem] *= exp(-xi * p.comp.species[elem].element.Z);
   }
   return nis;
 }
@@ -85,7 +85,7 @@ double Plasma::totalIonChargeDensity(const double phi, const PlasmaState& p) {
   const std::vector<double> nis = ni(phi, p);
   double chargeDensity = 0;
   for (size_t elem=0; elem<nis.size(); ++elem) {
-    chargeDensity += nis[elem] * p.comp.abundances[elem].element.Z;
+    chargeDensity += nis[elem] * p.comp.species[elem].element.Z;
   }
   return chargeDensity;
 }

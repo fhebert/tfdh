@@ -1,6 +1,6 @@
 
-#ifndef TFDH_ABUNDANCE_H
-#define TFDH_ABUNDANCE_H
+#ifndef TFDH_SPECIES_H
+#define TFDH_SPECIES_H
 
 #include "Element.h"
 
@@ -8,15 +8,15 @@
 #include <string>
 
 
-struct Abundance {
+struct Species {
   const double massFraction;
   const Element element;
 
-  Abundance(const double m, const Element& e) : massFraction(m), element(e) {
+  Species(const double m, const Element& e) : massFraction(m), element(e) {
     assert(massFraction > 0 && massFraction <= 1 &&
         "Mass fraction must be in (0,1)!");
   }
 };
 
 
-#endif // TFDH_ABUNDANCE_H
+#endif // TFDH_SPECIES_H

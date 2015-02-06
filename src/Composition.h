@@ -2,8 +2,8 @@
 #ifndef TFDH_COMPOSITION_H
 #define TFDH_COMPOSITION_H
 
-#include "Abundance.h"
 #include "Element.h"
+#include "Species.h"
 
 #include <vector>
 
@@ -11,9 +11,9 @@
 struct Composition {
 
   Composition(const Element& element); // simple c'tor for one-component plasmas
-  Composition(const std::vector<Abundance>& abundances);
+  Composition(const std::vector<Species>& species);
 
-  const std::vector<Abundance> abundances;
+  const std::vector<Species> species;
   const double meanMolecularWeightPerElectron;
 };
 

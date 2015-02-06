@@ -1,11 +1,11 @@
 
 #include "PlasmaState.h"
 
-#include "Abundance.h"
 #include "Composition.h"
 #include "GslWrappers.h"
 #include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"
+#include "Species.h"
 
 #include <cassert>
 #include <limits>
@@ -21,12 +21,11 @@ namespace {
   }
 
   std::vector<double> computeNi(double rho, const Composition& comp) {
-    const std::vector<Abundance>& abundances = comp.abundances;
     const double& mp = PhysicalConstantsCGS::ProtonMass;
-    std::vector<double> result(abundances.size());
-    for (size_t elem=0; elem<abundances.size(); ++elem) {
-      result[elem] = rho * abundances[elem].massFraction
-                     / (mp * abundances[elem].element.A);
+    std::vector<double> result(comp.species.size());
+    for (size_t elem=0; elem<result.size(); ++elem) {
+      result[elem] = rho * comp.species[elem].massFraction
+                     / (mp * comp.species[elem].element.A);
     }
     return result;
   }

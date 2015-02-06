@@ -32,9 +32,9 @@ int main() {
   const double t = 1e5;
   const double kt = t * PhysicalConstantsCGS::KBoltzmann;
 
-  std::vector<Abundance> ab;
-  ab.push_back(Abundance(1.0, Elements::He));
-  const Composition c(ab);
+  std::vector<Species> species;
+  species.push_back(Species(1.0, Elements::He));
+  const Composition c(species);
   const PlasmaState ps(rho, kt, c, false);
 
   std::cout << "plasma rho = " << ps.rho << "\n";
