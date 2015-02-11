@@ -37,7 +37,7 @@ namespace {
     public:
       NeErrorFromChi(const double ne, const double kt, const double tau)
         : ne0(ne), kt(kt), tau(tau) {}
-      double operator()(const double chi) const {
+      double operator()(const double chi) const override {
         // argument phi = 0
         return Plasma::ne(chi, kt, tau) - ne0;
       }

@@ -19,7 +19,7 @@ namespace {
       const PlasmaState p;
     public:
       FermiDiracDistribution(const double xi, const PlasmaState& p) : xi(xi), p(p) {}
-      double operator()(const double x) const {
+      double operator()(const double x) const override {
         const double val = (1.0 + p.tau*x) * sqrt(x + p.tau * x*x/2.0) / (1.0 + exp(x-p.chi-xi));
         return val;
       }

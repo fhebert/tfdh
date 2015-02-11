@@ -22,7 +22,7 @@ namespace {
       GSL::Spline spline;
     public:
       RadialInterpFunction(const RadialFunction& f) : spline(f) {}
-      double operator()(double x) const {return spline.eval(x);}
+      double operator()(double x) const override {return spline.eval(x);}
   };
 } // helper namespace
 

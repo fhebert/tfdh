@@ -22,7 +22,7 @@ namespace {
     public:
       EnergyDiff(const double kt, const int zion, const GSL::Spline& spline)
         : kt(kt), zion(zion), spline(spline) {}
-      double operator()(const double r) const {
+      double operator()(const double r) const override {
         return zion * spline.eval(r) - kt;
       }
   };
