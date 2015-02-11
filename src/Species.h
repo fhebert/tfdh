@@ -13,8 +13,7 @@ struct Species {
   const Element element;
 
   Species(const double m, const Element& e) : massFraction(m), element(e) {
-    assert(massFraction > 0 && massFraction <= 1 &&
-        "Mass fraction must be in (0,1)!");
+    assert(massFraction > 0 and massFraction <= 1 and "Mass fraction must be in (0,1)!");
   }
 };
 
