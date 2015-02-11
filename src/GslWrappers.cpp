@@ -1,5 +1,6 @@
 
 #include "GslWrappers.h"
+
 #include "RadialFunction.h"
 
 #include <cassert>
