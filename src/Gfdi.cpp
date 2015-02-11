@@ -41,7 +41,7 @@ namespace {
   // helper function for GFDI work
   double gfdi_helper(const int k, const double chi, const double tau,
       const double r) {
-    if (chi*tau < 1.e-4 && chi > 0.0) {
+    if (chi*tau < 1.e-4 and chi > 0.0) {
       return pow(chi, k+3./2)/(k+3./2);
     }
     else if (k==0) {
@@ -64,7 +64,7 @@ namespace {
 
 
 double gfdi(const GFDI order, const double chi, const double tau) {
-  assert(tau <= 100. && "GFDI: outside of known convergence region");
+  assert(tau <= 100. and "Outside of known convergence region for analytic approx.");
 
   const int k = static_cast<int>(order);
 
