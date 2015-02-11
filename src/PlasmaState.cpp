@@ -23,12 +23,12 @@ namespace {
 
   std::vector<double> computeNi(double rho, const Composition& comp) {
     const double& mp = PhysicalConstantsCGS::ProtonMass;
-    std::vector<double> result(comp.species.size());
-    for (size_t elem=0; elem<result.size(); ++elem) {
-      result[elem] = rho * comp.species[elem].massFraction
+    std::vector<double> ni(comp.species.size());
+    for (size_t elem=0; elem<ni.size(); ++elem) {
+      ni[elem] = rho * comp.species[elem].massFraction
                      / (mp * comp.species[elem].element.A);
     }
-    return result;
+    return ni;
   }
 
   class NeErrorFromChi : public GSL::FunctionObject {
