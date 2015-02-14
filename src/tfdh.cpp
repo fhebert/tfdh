@@ -2,6 +2,7 @@
 
 #include "Element.h"
 #include "Composition.h"
+#include "IntegrateOverRadius.h"
 #include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
@@ -51,6 +52,10 @@ int main() {
 
   std::cout << "number of bound electrons = " << bound_electrons << "\n";
   std::cout << "=> effective Z_net = " << Elements::Fe56.Z - bound_electrons << "\n";
+
+  const RadialFunction neb = TFDH::boundElectronDensity(tfdh, ps);
+  const RadialFunction neb_cum = accumulateOverRadius(neb);
+  writeToFile(neb_cum, "cummulative_neb.data");
 
   const std::vector<double> rexs = TFDH::exclusionRadii(tfdh, Elements::Fe56, ps);
   const double rws = Plasma::radiusWignerSeitz(Elements::Fe56, ps);

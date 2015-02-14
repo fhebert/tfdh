@@ -11,6 +11,7 @@
 #include "Species.h"
 
 #include <cmath>
+#include <iostream> // TODO: remove this once devel couts are removed
 
 
 namespace {
@@ -138,4 +139,19 @@ double TFDH::embeddingEnergy(const RadialFunction& tfdh, const PlasmaState& p, c
   // TODO: are these even physically motivated?
   const double dni = ki;
   const double dne = (Plasma::neKinetic(0.0,p) / p.ne) * deltaNumberElectrons(tfdh, p);
+
+  // TODO: remove these devel couts. information should be dumped to file instead
+  std::cout << "\nembedding energies in units of kT:\n";
+  std::cout << "ion field energy:             " << fi/p.kt << "\n";
+  std::cout << "e- field energy:              " << fe/p.kt << "\n";
+  std::cout << "overcounting of field energy: " << f2/p.kt << "\n";
+  std::cout << "change in ion kinetic energy: " << ki/p.kt << "\n";
+  std::cout << "change in e- kinetic energy:  " << ke/p.kt << "\n";
+  std::cout << "energy from exchanging ions:  " << dni/p.kt << "\n";
+  std::cout << "energy from exchanging e-'s:  " << dne/p.kt << "\n";
+  std::cout << "sum of everything        : " << (fi+fe+f2+ki+ke-dni-dne)/p.kt << "\n";
+  std::cout << "sum of the ones i like.. : " << (fi+fe+f2+ki+ke)/p.kt << "\n";
+  return fi+f2+fe+ki+ke;
 }
+
+
