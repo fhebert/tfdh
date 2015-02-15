@@ -9,12 +9,11 @@ struct Species;
 
 
 struct Composition {
+  const std::vector<Species> species;
+  const double meanMolecularWeightPerElectron;
 
   Composition(const Element& element); // simple c'tor for one-component plasmas
   Composition(const std::vector<Species>& species);
-
-  const std::vector<Species> species;
-  const double meanMolecularWeightPerElectron;
 };
 
 
