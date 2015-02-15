@@ -2,14 +2,12 @@
 #ifndef TFDH_RADIAL_INTEGRAL_H
 #define TFDH_RADIAL_INTEGRAL_H
 
-#include "RadialFunction.h"
-
 #include <vector>
 
 
-double integrateOverRadius(const RadialFunction& data);
+double integrateOverRadius(const std::vector<double>& r, const std::vector<double>& data);
 
-RadialFunction accumulateOverRadius(const RadialFunction& data);
+std::vector<double> accumulateOverRadius(const std::vector<double>& r, const std::vector<double>& data);
 
 
 #endif // TFDH_RADIAL_INTEGRAL_H

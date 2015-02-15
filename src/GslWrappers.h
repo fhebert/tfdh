@@ -3,8 +3,7 @@
 #define TFDH_GSL_WRAPPERS_H
 
 #include <gsl/gsl_spline.h>
-
-struct RadialFunction;
+#include <vector>
 
 
 namespace GSL {
@@ -15,7 +14,7 @@ namespace GSL {
       gsl_interp_accel* acc;
       gsl_spline* spline;
     public:
-      Spline(const RadialFunction& data);
+      Spline(const std::vector<double>& x, const std::vector<double>& f);
       ~Spline();
       double eval(double r) const;
   };

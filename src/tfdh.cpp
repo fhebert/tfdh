@@ -6,10 +6,10 @@
 #include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
-#include "RadialFunction.h"
 #include "Species.h"
 #include "TfdhFunctions.h"
 #include "TfdhOdeSolve.h"
+#include "TfdhSolution.h"
 
 #include <iostream>
 #include <string>
@@ -47,15 +47,15 @@ int main() {
   for (double ni : ps.ni)
     std::cout << "plasma ni = " << ni << "\n";
 
-  const RadialFunction tfdh = TFDH::solve(Elements::Fe56, ps);
+  const TfdhSolution tfdh = TFDH::solve(Elements::Fe56, ps);
   const double bound_electrons = TFDH::boundElectrons(tfdh, ps);
 
   std::cout << "number of bound electrons = " << bound_electrons << "\n";
   std::cout << "=> effective Z_net = " << Elements::Fe56.Z - bound_electrons << "\n";
 
-  const RadialFunction neb = TFDH::boundElectronDensity(tfdh, ps);
-  const RadialFunction neb_cum = accumulateOverRadius(neb);
-  writeToFile(neb_cum, "cummulative_neb.data");
+  const std::vector<double> neb = TFDH::boundElectronDensity(tfdh, ps);
+  const std::vector<double> neb_cum = accumulateOverRadius(tfdh.r, neb);
+  //writeToFile(neb_cum, "cummulative_neb.data");
 
   const std::vector<double> rexs = TFDH::exclusionRadii(tfdh, Elements::Fe56, ps);
   const double rws = Plasma::radiusWignerSeitz(Elements::Fe56, ps);

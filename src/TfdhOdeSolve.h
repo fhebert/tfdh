@@ -4,13 +4,13 @@
 
 struct Element;
 struct PlasmaState;
-struct RadialFunction;
+struct TfdhSolution;
 
 
 namespace TFDH {
 
-  RadialFunction solve(const Element& e, const PlasmaState& p);
-  RadialFunction integrateODE(const Element& e, const PlasmaState& p,
+  TfdhSolution solve(const Element& e, const PlasmaState& p);
+  TfdhSolution integrateODE(const Element& e, const PlasmaState& p,
       double r_init, double r_final, double dv0);
   double findPotentialRoot(const Element& e, const PlasmaState& p,
       double r_init, double r_final);

@@ -1,8 +1,6 @@
 
 #include "GslWrappers.h"
 
-#include "RadialFunction.h"
-
 #include <cassert>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_integration.h>
@@ -27,11 +25,12 @@ namespace {
 }
 
 
-GSL::Spline::Spline(const RadialFunction& f)
+GSL::Spline::Spline(const std::vector<double>& x, const std::vector<double>& f)
 : acc(gsl_interp_accel_alloc()),
-  spline(gsl_spline_alloc(gsl_interp_cspline, f.radii.size()))
+  spline(gsl_spline_alloc(gsl_interp_cspline, x.size()))
 {
-  gsl_spline_init(spline, f.radii.data(), f.data.data(), f.radii.size());
+  assert(x.size()==f.size());
+  gsl_spline_init(spline, x.data(), f.data(), x.size());
 }
 
 

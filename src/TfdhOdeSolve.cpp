@@ -5,7 +5,7 @@
 #include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
-#include "RadialFunction.h"
+#include "TfdhSolution.h"
 
 #include <cassert>
 #include <cmath>
@@ -35,7 +35,7 @@ namespace {
 }
 
 
-RadialFunction TFDH::solve(const Element& e, const PlasmaState& p)
+TfdhSolution TFDH::solve(const Element& e, const PlasmaState& p)
 {
   // ODE integration bounds
   const double rws = Plasma::radiusWignerSeitz(e,p);
@@ -50,7 +50,7 @@ RadialFunction TFDH::solve(const Element& e, const PlasmaState& p)
 }
 
 
-RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
+TfdhSolution TFDH::integrateODE(const Element& e, const PlasmaState& p,
     const double r_init, const double r_final, const double dv0)
 {
   TfdhParams params(e,p);
@@ -68,15 +68,14 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
   gsl_odeiv2_system sys = {tfdhOde, nullptr, dim, &params};
 
   // TODO: fix units. too many quanities: solution / phi / xi / ...
-  std::vector<double> radii, potentials;
-  radii.push_back(r_init);
-  potentials.push_back(qe*solution[0]/r_init);
+  std::vector<double> rs = {r_init};
+  std::vector<double> phis = {qe*solution[0]/r_init};
 
   while (r < r_final) {
     const int status = gsl_odeiv2_evolve_apply(ev, ctrl, step, &sys, &r, r_final, &dr, solution);
     assert(status==GSL_SUCCESS);
-    radii.push_back(r);
-    potentials.push_back(qe*solution[0]/r);
+    rs.push_back(r);
+    phis.push_back(qe*solution[0]/r);
     if (solution[0] <= 0 or (solution[1]-solution[0])/r > 0) break;
   }
   assert(r < r_final and "integrated ODE until final radius without terminating!");
@@ -84,7 +83,7 @@ RadialFunction TFDH::integrateODE(const Element& e, const PlasmaState& p,
   gsl_odeiv2_evolve_free(ev);
   gsl_odeiv2_control_free(ctrl);
   gsl_odeiv2_step_free(step);
-  return RadialFunction(radii, potentials);
+  return TfdhSolution(rs, phis);
 }
 
 
@@ -99,8 +98,8 @@ double TFDH::findPotentialRoot(const Element& e, const PlasmaState& p,
     const double v_step = 100.0;
     const int bracket_attempts = 100;
     for (int i=0; i<bracket_attempts; ++i) {
-      const auto& rf = integrateODE(e, p, r_init, r_final, v_low);
-      if (rf.data.back() < 0.0) {
+      const auto& tfdh = integrateODE(e, p, r_init, r_final, v_low);
+      if (tfdh.phi.back() < 0.0) {
         success = true;
         break;
       }
@@ -124,8 +123,8 @@ double TFDH::findPotentialRoot(const Element& e, const PlasmaState& p,
         break;
       }
 
-      const auto& rf = integrateODE(e, p, r_init, r_final, v_mid);
-      ((rf.data.back() >= 0.0) ? v_high : v_low) = v_mid;
+      const auto& tfdh = integrateODE(e, p, r_init, r_final, v_mid);
+      ((tfdh.phi.back() >= 0.0) ? v_high : v_low) = v_mid;
     }
     assert(success and "failed to find potential root within bracket");
   }

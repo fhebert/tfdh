@@ -7,8 +7,8 @@
 #include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
-#include "RadialFunction.h"
 #include "Species.h"
+#include "TfdhSolution.h"
 
 #include <cmath>
 #include <iostream> // TODO: remove this once devel couts are removed
@@ -29,112 +29,109 @@ namespace {
   };
 
 
-  RadialFunction deltaIonFieldEnergy(const RadialFunction& tfdh, const PlasmaState& p) {
-    std::vector<double> dife(tfdh.data.size(), 0);
+  std::vector<double> deltaIonFieldEnergy(const TfdhSolution& tfdh, const PlasmaState& p) {
+    std::vector<double> dife(tfdh.r.size(), 0);
     for (size_t i=0; i<dife.size(); ++i) {
-      const double phi = tfdh.data[i];
+      const double phi = tfdh.phi[i];
       dife[i] = phi * Plasma::totalIonChargeDensity(phi, p);
     }
-    return RadialFunction(tfdh.radii, dife);
+    return dife;
   }
 
-  RadialFunction deltaElectronFieldEnergy(const RadialFunction& tfdh, const PlasmaState& p) {
-    std::vector<double> defe(tfdh.data.size(), 0);
+  std::vector<double> deltaElectronFieldEnergy(const TfdhSolution& tfdh, const PlasmaState& p) {
+    std::vector<double> defe(tfdh.r.size(), 0);
     for (size_t i=0; i<defe.size(); ++i) {
-      const double phi = tfdh.data[i];
+      const double phi = tfdh.phi[i];
       defe[i] = (-1) * phi * Plasma::ne(phi, p);
     }
-    return RadialFunction(tfdh.radii, defe);
+    return defe;
   }
 
-  RadialFunction deltaFieldCountingEnergy(const RadialFunction& tfdh, const PlasmaState& p,
-      const Element& e) {
-    std::vector<double> dfce(tfdh.data.size(), 0);
+  std::vector<double> deltaFieldCountingEnergy(const TfdhSolution& tfdh, const PlasmaState& p, const Element& e) {
+    std::vector<double> dfce(tfdh.r.size(), 0);
     const double& qe = PhysicalConstantsCGS::ElectronCharge;
     for (size_t i=0; i<dfce.size(); ++i) {
-      const double phi = tfdh.data[i];
-      const double phi_ext = e.Z * qe * qe / tfdh.radii[i];
+      const double phi = tfdh.phi[i];
+      const double phi_ext = e.Z * qe * qe / tfdh.r[i];
       dfce[i] = 0.5 * (Plasma::totalIonChargeDensity(phi, p) - Plasma::ne(phi, p)) * (phi_ext - phi);
     }
-    return RadialFunction(tfdh.radii, dfce);
+    return dfce;
   }
 
-  double deltaNumberIons(const RadialFunction& tfdh, const PlasmaState& p) {
+  double deltaNumberIons(const TfdhSolution& tfdh, const PlasmaState& p) {
     double result = 0;
-    std::vector<double> deltaNi(tfdh.data.size(), 0);
+    std::vector<double> deltaNi(tfdh.r.size(), 0);
     // TODO clean this up
     for (size_t i=0; i<p.ni.size(); ++i) {
       for (size_t pt=0; pt<deltaNi.size(); ++pt) {
-        deltaNi[pt] = Plasma::ni(tfdh.data[pt], p)[i] - p.ni[i];
+        deltaNi[pt] = Plasma::ni(tfdh.phi[pt], p)[i] - p.ni[i];
       }
-      result += integrateOverRadius(RadialFunction(tfdh.radii, deltaNi));
+      result += integrateOverRadius(tfdh.r, deltaNi);
     }
     return result;
   }
 
-  RadialFunction deltaElectronKineticEnergy(const RadialFunction& tfdh, const PlasmaState& p) {
-    std::vector<double> deke(tfdh.data.size(), 0);
-    for (size_t i=0; i<deke.size(); ++i)
-      deke[i] = Plasma::neKinetic(tfdh.data[i], p) - Plasma::neKinetic(0.0, p);
-    return RadialFunction(tfdh.radii, deke);
+  std::vector<double> deltaElectronKineticEnergy(const TfdhSolution& tfdh, const PlasmaState& p) {
+    std::vector<double> deke(tfdh.r.size(), 0);
+    for (size_t i=0; i<deke.size(); ++i) {
+      deke[i] = Plasma::neKinetic(tfdh.phi[i], p) - Plasma::neKinetic(0.0, p);
+    }
+    return deke;
   }
 
-  double deltaNumberElectrons(const RadialFunction& tfdh, const PlasmaState& p) {
-    std::vector<double> deltaNe(tfdh.data.size(), 0);
+  double deltaNumberElectrons(const TfdhSolution& tfdh, const PlasmaState& p) {
+    std::vector<double> deltaNe(tfdh.r.size(), 0);
     for (size_t i=0; i<deltaNe.size(); ++i) {
-      deltaNe[i] = Plasma::ne(tfdh.data[i], p) - p.ne;
+      deltaNe[i] = Plasma::ne(tfdh.phi[i], p) - p.ne;
     }
-    return integrateOverRadius(RadialFunction(tfdh.radii, deltaNe));
+    return integrateOverRadius(tfdh.r, deltaNe);
   }
 
 } // helper namespace
 
 
 
-RadialFunction TFDH::boundElectronDensity(const RadialFunction& tfdh, const PlasmaState& p, const double cutoff)
+std::vector<double> TFDH::boundElectronDensity(const TfdhSolution& tfdh,
+    const PlasmaState& p, const double cutoff)
 {
-  std::vector<double> nebs(tfdh.data.size());
+  std::vector<double> nebs(tfdh.r.size());
   for (size_t i=0; i<nebs.size(); ++i) {
-    nebs[i] = Plasma::neBound(tfdh.data[i], p, cutoff);
+    nebs[i] = Plasma::neBound(tfdh.phi[i], p, cutoff);
   }
-  return RadialFunction(tfdh.radii, nebs);
+  return nebs;
 }
 
 
-double TFDH::boundElectrons(const RadialFunction& tfdh, const PlasmaState& p, const double cutoff)
+double TFDH::boundElectrons(const TfdhSolution& tfdh, const PlasmaState& p, const double cutoff)
 {
-  std::vector<double> nebs(tfdh.data.size());
-  for (size_t i=0; i<nebs.size(); ++i) {
-    nebs[i] = Plasma::neBound(tfdh.data[i], p, cutoff);
-  }
-  return integrateOverRadius(RadialFunction(tfdh.radii, nebs));
+  return integrateOverRadius(tfdh.r, boundElectronDensity(tfdh, p, cutoff));
 }
 
 
-std::vector<double> TFDH::exclusionRadii(const RadialFunction& tfdh,
+std::vector<double> TFDH::exclusionRadii(const TfdhSolution& tfdh,
     const Element& e, const PlasmaState& p)
 {
   // for each ion species, find radius where:
   //   E_thermal == E_electrostatic  =>  kt == Zion phi
-  const GSL::Spline spline(tfdh);
+  const GSL::Spline spline(tfdh.r, tfdh.phi);
   std::vector<double> rexcl(p.ni);
   for (size_t elem=0; elem<rexcl.size(); ++elem) {
     const EnergyDiff delta(p.kt, p.comp.species[elem].element.Z, spline);
     const double eps_abs = 1e-6 * Plasma::radiusWignerSeitz(e, p);
     const double eps_rel = 1e-6;
-    rexcl[elem] = GSL::findRoot(delta, tfdh.radii.front(), tfdh.radii.back(), eps_abs, eps_rel);
+    rexcl[elem] = GSL::findRoot(delta, tfdh.r.front(), tfdh.r.back(), eps_abs, eps_rel);
   }
   return rexcl;
 }
 
 
-double TFDH::embeddingEnergy(const RadialFunction& tfdh, const PlasmaState& p, const Element& e)
+double TFDH::embeddingEnergy(const TfdhSolution& tfdh, const PlasmaState& p, const Element& e)
 {
-  const double fi = integrateOverRadius(deltaIonFieldEnergy(tfdh, p));
-  const double fe = integrateOverRadius(deltaElectronFieldEnergy(tfdh, p));
-  const double f2 = integrateOverRadius(deltaFieldCountingEnergy(tfdh, p, e));
+  const double fi = integrateOverRadius(tfdh.r, deltaIonFieldEnergy(tfdh, p));
+  const double fe = integrateOverRadius(tfdh.r, deltaElectronFieldEnergy(tfdh, p));
+  const double f2 = integrateOverRadius(tfdh.r, deltaFieldCountingEnergy(tfdh, p, e));
   const double ki = 1.5 * p.kt * deltaNumberIons(tfdh, p);
-  const double ke = integrateOverRadius(deltaElectronKineticEnergy(tfdh, p));
+  const double ke = integrateOverRadius(tfdh.r, deltaElectronKineticEnergy(tfdh, p));
 
   // TODO: are these even physically motivated?
   const double dni = ki;
