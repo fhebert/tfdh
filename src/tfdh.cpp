@@ -7,6 +7,7 @@
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
 #include "Species.h"
+#include "TfdhIon.h"
 #include "TfdhFunctions.h"
 #include "TfdhOdeSolve.h"
 #include "TfdhSolution.h"
@@ -47,34 +48,27 @@ int main() {
   for (double ni : ps.ni)
     std::cout << "plasma ni = " << ni << "\n";
 
-  const TfdhSolution tfdh = TFDH::solve(Elements::Fe56, ps);
-  const double bound_electrons = TFDH::boundElectrons(tfdh, ps);
+  const TfdhIon ion(ps, Elements::Fe56);
 
-  std::cout << "number of bound electrons = " << bound_electrons << "\n";
-  std::cout << "=> effective Z_net = " << Elements::Fe56.Z - bound_electrons << "\n";
+  std::cout << "number of bound electrons = " << ion.numberBoundElectrons << "\n";
+  std::cout << "=> effective Z_net = " << Elements::Fe56.Z - ion.numberBoundElectrons << "\n";
 
-  const std::vector<double> neb = TFDH::boundElectronDensity(tfdh, ps);
-  const std::vector<double> neb_cum = accumulateOverRadius(tfdh.r, neb);
-  //writeToFile(neb_cum, "cummulative_neb.data");
-
-  const std::vector<double> rexs = TFDH::exclusionRadii(tfdh, Elements::Fe56, ps);
   const double rws = Plasma::radiusWignerSeitz(Elements::Fe56, ps);
   const double scale = 26/PhysicalConstantsCGS::BohrRadius;
 
   std::cout << "rws = " << rws << ", rws*Ztr/a0 = " << rws*scale << "\n";
-  for (double rex : rexs)
+  for (double rex : ion.exclusionRadii)
     std::cout << "rex = " << rex << ", rex*Ztr/a0 = " << rex*scale << "\n";
 
-  const TFDH::EnergyDeltas ed = TFDH::embeddingEnergy(ion.tfdh, ps, Elements::Fe56);
   std::cout << "\nembedding energies in units of kT:\n";
-  std::cout << "ion field energy:             " << ed.fi/ps.kt << "\n";
-  std::cout << "e- field energy:              " << ed.fe/ps.kt << "\n";
-  std::cout << "overcounting of field energy: " << ed.f2/ps.kt << "\n";
-  std::cout << "change in ion kinetic energy: " << ed.ki/ps.kt << "\n";
-  std::cout << "change in e- kinetic energy:  " << ed.ke/ps.kt << "\n";
-  std::cout << "energy from exchanging ions:  " << ed.ni/ps.kt << "\n";
-  std::cout << "energy from exchanging e-'s:  " << ed.ne/ps.kt << "\n";
-  std::cout << "sum of everything        : " << ed.total/ps.kt << "\n";
+  std::cout << "ion field energy:             " << ion.embeddingEnergies.fi/ps.kt << "\n";
+  std::cout << "e- field energy:              " << ion.embeddingEnergies.fe/ps.kt << "\n";
+  std::cout << "overcounting of field energy: " << ion.embeddingEnergies.f2/ps.kt << "\n";
+  std::cout << "change in ion kinetic energy: " << ion.embeddingEnergies.ki/ps.kt << "\n";
+  std::cout << "change in e- kinetic energy:  " << ion.embeddingEnergies.ke/ps.kt << "\n";
+  std::cout << "energy from exchanging ions:  " << ion.embeddingEnergies.ni/ps.kt << "\n";
+  std::cout << "energy from exchanging e-'s:  " << ion.embeddingEnergies.ne/ps.kt << "\n";
+  std::cout << "sum of everything        : " << ion.embeddingEnergies.total/ps.kt << "\n";
   //std::cout << "sum of the ones i like.. : " << (fi+fe+f2+ki+ke)/p.kt << "\n";
 
   return 0;
