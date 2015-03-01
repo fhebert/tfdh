@@ -65,7 +65,17 @@ int main() {
   for (double rex : rexs)
     std::cout << "rex = " << rex << ", rex*Ztr/a0 = " << rex*scale << "\n";
 
-  TFDH::embeddingEnergy(tfdh, ps, Elements::Fe56);
+  const TFDH::EnergyDeltas ed = TFDH::embeddingEnergy(ion.tfdh, ps, Elements::Fe56);
+  std::cout << "\nembedding energies in units of kT:\n";
+  std::cout << "ion field energy:             " << ed.fi/ps.kt << "\n";
+  std::cout << "e- field energy:              " << ed.fe/ps.kt << "\n";
+  std::cout << "overcounting of field energy: " << ed.f2/ps.kt << "\n";
+  std::cout << "change in ion kinetic energy: " << ed.ki/ps.kt << "\n";
+  std::cout << "change in e- kinetic energy:  " << ed.ke/ps.kt << "\n";
+  std::cout << "energy from exchanging ions:  " << ed.ni/ps.kt << "\n";
+  std::cout << "energy from exchanging e-'s:  " << ed.ne/ps.kt << "\n";
+  std::cout << "sum of everything        : " << ed.total/ps.kt << "\n";
+  //std::cout << "sum of the ones i like.. : " << (fi+fe+f2+ki+ke)/p.kt << "\n";
 
   return 0;
 }
