@@ -24,7 +24,7 @@ namespace {
 
 
 Composition::Composition(const Element& element)
-: species(std::vector<Species>(1, Species(1.0, element))),
+: species({{1.0, element}}),
   meanMolecularWeightPerElectron(element.Z / static_cast<double>(element.A))
 {}
 
