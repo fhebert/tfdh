@@ -35,11 +35,9 @@ int main() {
   const double t = 1e8;
   const double kt = t * PhysicalConstantsCGS::KBoltzmann;
 
-  std::vector<Species> species;
-  species.push_back(Species(0.7, Elements::He));
-  species.push_back(Species(0.3, Elements::H));
-  const Composition c(species);
-  const PlasmaState ps(rho, kt, c, false);
+  const auto species = std::vector<Species> {{
+    Species(0.7, Elements::He), Species(0.3, Elements::H)}};
+  const PlasmaState ps(rho, kt, Composition(species), false);
 
   const TfdhIon ion(ps, Elements::Fe56);
   ion.printSummaryToFile("summary.data");
