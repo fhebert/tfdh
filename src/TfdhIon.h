@@ -11,22 +11,19 @@
 #include <vector>
 
 
-struct TfdhIon {
+class TfdhIon {
+  public:
+    TfdhIon(const PlasmaState& plasmaState, const Element& element);
 
-  const PlasmaState ps;
-  const Element e;
-  const TfdhSolution tfdh;
-  const double numberBoundElectrons;
-  const TFDH::EnergyDeltas embeddingEnergies;
-  const std::vector<double> exclusionRadii;
+    void printSummaryToFile(const std::string& filename) const;
 
-  TfdhIon(const PlasmaState& plasmaState, const Element& element)
-  : ps(plasmaState), e(element),
-    tfdh(TFDH::solve(e, ps)),
-    numberBoundElectrons(TFDH::boundElectrons(tfdh, ps)),
-    embeddingEnergies(TFDH::embeddingEnergy(tfdh, ps, e)),
-    exclusionRadii(TFDH::exclusionRadii(tfdh, e, ps))
-  {}
+
+    const PlasmaState ps;
+    const Element e;
+    const TfdhSolution tfdh;
+    const double numberBoundElectrons;
+    const TFDH::EnergyDeltas embeddingEnergies;
+    const std::vector<double> exclusionRadii;
 
 };
 
