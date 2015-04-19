@@ -2,7 +2,7 @@
 #ifndef TFDH_ODE_SOLVE_HPP
 #define TFDH_ODE_SOLVE_HPP
 
-struct Element;
+class Element;
 struct PlasmaState;
 struct TfdhSolution;
 

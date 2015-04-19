@@ -4,7 +4,7 @@
 
 #include <vector>
 
-struct Element;
+class Element;
 struct Species;
 
 

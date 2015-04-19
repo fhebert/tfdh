@@ -18,11 +18,6 @@
 
 namespace {
 
-  std::ostream& operator<<(std::ostream& s, const Element& e) {
-    s << e.name;
-    return s;
-  }
-
   std::ostream& operator<<(std::ostream& s, const Species& sp) {
     s << sp.massFraction << " by mass of " << sp.element;
     return s;

@@ -5,7 +5,7 @@
 #include <vector>
 
 struct Composition;
-struct Element;
+class Element;
 struct PlasmaState;
 
 
