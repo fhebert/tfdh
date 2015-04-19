@@ -13,6 +13,11 @@
 
 
 namespace {
+
+  const double me = PhysicalConstantsCGS::ElectronMass;
+  const double hb = PhysicalConstantsCGS::Hbar;
+  const double NePrefactor = pow(2.0*me, 1.5) / (2.0 * M_PI*M_PI * hb*hb*hb);
+
   class FermiDiracDistribution : public GSL::FunctionObject {
     private:
       const double xi;
@@ -37,7 +42,6 @@ double Plasma::rhoFromNe(const double ne, const Composition& comp) {
 double Plasma::ne(const double chi, const double kt, const double tau) {
   const double i12 = gfdi(GFDI::Order12, chi, tau);
   const double i32 = gfdi(GFDI::Order32, chi, tau);
-  const double& NePrefactor = PhysicalConstantsCGS::NePrefactor;
   return NePrefactor * pow(kt, 1.5) * (i12 + tau*i32);
 }
 
@@ -53,7 +57,6 @@ double Plasma::neBound(const double phi, const PlasmaState& p, const double cuto
   // * potential attractive ==> xi > 0
   // * integration bounds valid ==> (xi-cutoff) > 0
   if (xi > 0 and xi > cutoff) {
-    const double& NePrefactor = PhysicalConstantsCGS::NePrefactor;
     FermiDiracDistribution fd(xi, p);
     const double eps = 1.e-6;
     return NePrefactor * pow(p.kt, 1.5) * GSL::integrate(fd, 0, xi-cutoff, eps, eps);
@@ -68,7 +71,6 @@ double Plasma::neKinetic(const double phi, const PlasmaState& p) {
   const double i32 = gfdi(GFDI::Order32, p.chi+xi, p.tau);
   const double i52 = gfdi(GFDI::Order52, p.chi+xi, p.tau);
   // TODO: check prefactor is the same here
-  const double& NePrefactor = PhysicalConstantsCGS::NePrefactor;
   return NePrefactor * pow(p.kt, 2.5) * (i32 + p.tau*i52);
 }
 
