@@ -1,6 +1,6 @@
 
-#ifndef TFDH_ELEMENTS_H
-#define TFDH_ELEMENTS_H
+#ifndef TFDH_ELEMENT_H
+#define TFDH_ELEMENT_H
 
 #include <cassert>
 #include <string>
@@ -18,10 +18,4 @@ struct Element {
 };
 
 
-inline std::string toString(const Element& e) {
-  return "element: " + e.name + " with A=" + std::to_string(e.A)
-    + ", Z=" + std::to_string(e.Z);
-}
-
-
-#endif // TFDH_ELEMENTS_H
+#endif // TFDH_ELEMENT_H
