@@ -7,7 +7,6 @@
 #include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
-#include "Species.h"
 #include "TfdhSolution.h"
 
 #include <cmath>

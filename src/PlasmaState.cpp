@@ -6,7 +6,6 @@
 #include "GslWrappers.h"
 #include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"
-#include "Species.h"
 
 #include <cassert>
 #include <limits>

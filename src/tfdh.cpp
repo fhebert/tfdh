@@ -6,7 +6,6 @@
 #include "PhysicalConstants.h"
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
-#include "Species.h"
 #include "TfdhIon.h"
 #include "TfdhFunctions.h"
 #include "TfdhOdeSolve.h"
@@ -35,8 +34,7 @@ int main() {
   const double t = 1e8;
   const double kt = t * PhysicalConstantsCGS::KBoltzmann;
 
-  const auto species = std::vector<Species> {{
-    Species(0.7, Elements::He), Species(0.3, Elements::H)}};
+  const auto species = std::vector<Species> {{ {0.7, Elements::He}, {0.3, Elements::H} }};
   const PlasmaState ps(rho, kt, Composition(species), false);
 
   const TfdhIon ion(ps, Elements::Fe56);

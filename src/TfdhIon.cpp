@@ -5,7 +5,6 @@
 #include "PlasmaFunctions.h"
 #include "PlasmaState.h"
 #include "PhysicalConstants.h"
-#include "Species.h"
 #include "TfdhOdeSolve.h"
 #include "TfdhFunctions.h"
 #include "TfdhSolution.h"

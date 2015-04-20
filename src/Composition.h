@@ -2,10 +2,16 @@
 #ifndef TFDH_COMPOSITION_H
 #define TFDH_COMPOSITION_H
 
+#include "Element.h"
+
 #include <vector>
 
-class Element;
-struct Species;
+
+// a "helper" struct to pair information used in Composition
+struct Species {
+  const double massFraction;
+  const Element element;
+};
 
 
 struct Composition {
