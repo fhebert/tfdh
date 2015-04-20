@@ -11,7 +11,7 @@
 #include "TfdhOdeSolve.h"
 #include "TfdhSolution.h"
 
-#include <iostream>
+#include <ostream>
 #include <string>
 #include <vector>
 

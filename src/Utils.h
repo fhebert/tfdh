@@ -2,7 +2,7 @@
 #ifndef TFDH_UTILS_H
 #define TFDH_UTILS_H
 
-#include <iostream>
+#include <ostream>
 #include <vector>
 
 

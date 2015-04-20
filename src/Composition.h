@@ -4,7 +4,7 @@
 
 #include "Element.h"
 
-#include <iostream>
+#include <ostream>
 #include <vector>
 
 

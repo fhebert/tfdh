@@ -3,7 +3,7 @@
 #define TFDH_ELEMENT_H
 
 #include <cassert>
-#include <iostream>
+#include <ostream>
 #include <string>
 
 

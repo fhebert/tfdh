@@ -5,7 +5,7 @@
 #include "Utils.h"
 
 #include <cassert>
-#include <iostream>
+#include <ostream>
 #include <vector>
 
 
