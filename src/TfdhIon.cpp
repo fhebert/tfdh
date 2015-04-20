@@ -8,6 +8,7 @@
 #include "TfdhOdeSolve.h"
 #include "TfdhFunctions.h"
 #include "TfdhSolution.h"
+#include "Utils.h"
 
 #include <fstream>
 #include <iostream>
@@ -19,24 +20,6 @@ namespace {
 
   std::ostream& operator<<(std::ostream& s, const Species& sp) {
     s << sp.massFraction << " by mass of " << sp.element;
-    return s;
-  }
-
-  template <typename T>
-  std::ostream& operator<<(std::ostream& s, const std::vector<T>& v) {
-    // do nothing if v is empty
-    if (v.size()==1) {
-      s << v[0];
-    }
-    else if (v.size() > 1) {
-      s << "(";
-      for (size_t i=0; i<v.size(); ++i) {
-        s << v[i];
-        if (i != v.size()-1)
-          s << ", ";
-      }
-      s << ")";
-    }
     return s;
   }
 
