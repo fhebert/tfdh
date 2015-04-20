@@ -5,12 +5,12 @@
 #include "Utils.h"
 
 #include <cassert>
+#include <cmath>
 #include <ostream>
 #include <vector>
 
 
 namespace {
-
   double compute_mu_e(const std::vector<Species>& species) {
     double inv_mu_e = 0;
     for (const Species& s : species) {
@@ -20,8 +20,8 @@ namespace {
     }
     return 1.0/inv_mu_e;
   }
-
 } // helper namespace
+
 
 
 Composition::Composition(const Element& element)
@@ -29,16 +29,19 @@ Composition::Composition(const Element& element)
   meanMolecularWeightPerElectron(element.Z / static_cast<double>(element.A))
 {}
 
+
 Composition::Composition(const std::vector<Species>& species)
 : species(species),
   meanMolecularWeightPerElectron(compute_mu_e(species))
 {
-  // sanity check on the mass fractions: they must add to 1
+  // sanity checks on the mass fractions:
+  // each must be in (0,1) and they must sum to 1
   double totalMassFraction = 0;
   for (const Species& s : species) {
+    assert(s.massFraction > 0 and s.massFraction <= 1);
     totalMassFraction += s.massFraction;
   }
-  assert(totalMassFraction == 1.0);
+  assert(fabs(totalMassFraction-1.0) < 1e-15);
 }
 
 
