@@ -16,21 +16,6 @@
 #include <vector>
 
 
-namespace {
-
-  std::ostream& operator<<(std::ostream& s, const Species& sp) {
-    s << sp.massFraction << " by mass of " << sp.element;
-    return s;
-  }
-
-  std::ostream& operator<<(std::ostream& s, const Composition& c) {
-    s << c.species;
-    return s;
-  }
-}
-
-
-
 TfdhIon::TfdhIon(const PlasmaState& plasmaState, const Element& element)
 : ps(plasmaState),
   e(element),

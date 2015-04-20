@@ -2,8 +2,10 @@
 #include "Composition.h"
 
 #include "Element.h"
+#include "Utils.h"
 
 #include <cassert>
+#include <iostream>
 #include <vector>
 
 
@@ -37,4 +39,17 @@ Composition::Composition(const std::vector<Species>& species)
     totalMassFraction += s.massFraction;
   }
   assert(totalMassFraction == 1.0);
+}
+
+
+
+std::ostream& operator<<(std::ostream& s, const Species& sp) {
+  s << sp.massFraction << " by mass of " << sp.element;
+  return s;
+}
+
+
+std::ostream& operator<<(std::ostream& s, const Composition& c) {
+  s << c.species;
+  return s;
 }

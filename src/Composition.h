@@ -4,6 +4,7 @@
 
 #include "Element.h"
 
+#include <iostream>
 #include <vector>
 
 
@@ -21,6 +22,10 @@ struct Composition {
   Composition(const Element& element); // simple c'tor for one-component plasmas
   Composition(const std::vector<Species>& species);
 };
+
+
+std::ostream& operator<<(std::ostream& s, const Species& sp);
+std::ostream& operator<<(std::ostream& s, const Composition& c);
 
 
 #endif // TFDH_COMPOSITION_H
