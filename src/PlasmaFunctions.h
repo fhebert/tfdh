@@ -11,6 +11,7 @@ struct PlasmaState;
 
 namespace Plasma {
 
+  // for initializing a PlasmaState from an ne instead of a rho
   double rhoFromNe(double ne, const Composition& comp);
 
   double ne(double chi, double kt, double tau);
