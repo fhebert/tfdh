@@ -16,6 +16,7 @@ class TfdhIon {
     TfdhIon(const PlasmaState& plasmaState, const Element& element);
 
     void printSummaryToFile(const std::string& filename) const;
+    void printRadialProfileToFile(const std::string& filename) const;
 
 
     const PlasmaState ps;

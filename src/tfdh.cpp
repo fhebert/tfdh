@@ -39,6 +39,7 @@ int main() {
 
   const TfdhIon ion(ps, Elements::Fe56);
   ion.printSummaryToFile("summary.data");
+  ion.printRadialProfileToFile("profile.data");
 
   return 0;
 }
