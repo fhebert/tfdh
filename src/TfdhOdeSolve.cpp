@@ -59,6 +59,7 @@ TfdhSolution TFDH::integrateODE(const Element& e, const PlasmaState& p,
   const double eps_rel = 0;
   double r = r_init;
   double dr = r_init;
+  const double max_dr_over_r = 0.2;
   const double& qe = PhysicalConstantsCGS::ElectronCharge;
   double solution[dim] = {qe*e.Z + r_init*dv0, dv0};
 
@@ -73,6 +74,7 @@ TfdhSolution TFDH::integrateODE(const Element& e, const PlasmaState& p,
 
   while (r < r_final) {
     const int status = gsl_odeiv2_evolve_apply(ev, ctrl, step, &sys, &r, r_final, &dr, solution);
+    dr = fmin(dr, max_dr_over_r * r); // prevent dr from being "too big"
     assert(status==GSL_SUCCESS);
     rs.push_back(r);
     phis.push_back(qe*solution[0]/r);
