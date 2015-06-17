@@ -10,7 +10,6 @@
 namespace {
 
   // numerous constants used in the analytic approximations
-  //const std::array<double, 5> x = {{
   const auto x = std::array<double, 5> {{
     7.265351e-2, 0.2694608, 0.533122, 0.7868801, 0.9569313}};
 
@@ -38,21 +37,21 @@ namespace {
     return a*a*a;
   }
 
-  // helper function for GFDI work
-  double gfdi_helper(const int k, const double chi, const double tau,
-      const double r) {
+  // function F_k(chi, tau) from Chabrier & Potekhin
+  double Fk(const int k, const double chi, const double tau,
+      const double R) {
     if (chi*tau < 1.e-4 and chi > 0.0) {
       return pow(chi, k+3./2)/(k+3./2);
     }
     else if (k==0) {
-      return (chi + 1/tau)*r/2
-        - pow(2*tau, -3./2) * log(1 + tau*chi + sqrt(2*tau)*r);
+      return (chi + 1/tau)*R/2
+        - pow(2*tau, -3./2) * log(1 + tau*chi + sqrt(2*tau)*R);
     }
     else if (k==1) {
-      return (2./3*cube(r) - gfdi_helper(0, chi, tau, r)) / tau;
+      return (2./3*cube(R) - Fk(0, chi, tau, R)) / tau;
     }
     else if (k==2) {
-      return (2*chi*cube(r) - 5*gfdi_helper(1, chi, tau, r)) / (4*tau);
+      return (2*chi*cube(R) - 5*Fk(1, chi, tau, R)) / (4*tau);
     }
     else {
       return 0.0;
@@ -79,14 +78,14 @@ namespace {
   }
 
   inline double gfdi_large(const int k, const double chi, const double tau) {
-    const double r = sqrt(chi*(1 + chi*tau/2));
-    return gfdi_helper(k, chi, tau, r)
-      + M_PI*M_PI/6. * pow(chi, k) * (k + 1./2 + (k+1)*chi*tau/2) / r;
+    const double R = sqrt(chi*(1 + chi*tau/2));
+    return Fk(k, chi, tau, R)
+      + M_PI*M_PI/6. * pow(chi, k) * (k + 1./2 + (k+1)*chi*tau/2) / R;
   }
 
-  // a cubic transition function which satisfies:
-  // f(0) = 0, f'(0) = 0
-  // f(1) = 1, f'(1) = 0
+  // a cubic transition function which satisfies
+  //   f(0) = 0, f'(0) = 0
+  //   f(1) = 1, f'(1) = 0
   inline double transition(const double fl, const double fr,
       const double x, const double xl, const double xr) {
     const double z = (x-xl)/(xr-xl);
