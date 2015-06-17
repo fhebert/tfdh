@@ -38,6 +38,7 @@ double Plasma::rhoFromNe(const double ne, const Composition& comp) {
 }
 
 
+
 double Plasma::ne(const double chi, const double kt, const double tau) {
   const double i12 = gfdi(GFDI::Order12, chi, tau);
   const double i32 = gfdi(GFDI::Order32, chi, tau);
@@ -48,7 +49,6 @@ double Plasma::ne(const double phi, const PlasmaState& p) {
   const double xi = fmax(0, phi/p.kt);
   return ne(p.chi + xi, p.kt, p.tau);
 }
-
 
 double Plasma::neBound(const double phi, const PlasmaState& p, const double cutoff) {
   const double xi = phi/p.kt;
@@ -64,16 +64,6 @@ double Plasma::neBound(const double phi, const PlasmaState& p, const double cuto
   }
 }
 
-
-double Plasma::neKinetic(const double phi, const PlasmaState& p) {
-  const double xi = fmax(0, phi/p.kt);
-  const double i32 = gfdi(GFDI::Order32, p.chi+xi, p.tau);
-  const double i52 = gfdi(GFDI::Order52, p.chi+xi, p.tau);
-  // TODO: check prefactor is the same here
-  return NePrefactor * pow(p.kt, 2.5) * (i32 + p.tau*i52);
-}
-
-
 std::vector<double> Plasma::ni(const double phi, const PlasmaState& p) {
   const double xi = fmax(0, phi/p.kt);
   std::vector<double> ni = p.ni;
@@ -81,6 +71,16 @@ std::vector<double> Plasma::ni(const double phi, const PlasmaState& p) {
     ni[elem] *= exp(-xi * p.comp.species[elem].element.Z);
   }
   return ni;
+}
+
+
+
+double Plasma::electronKineticEnergyDensity(const double phi, const PlasmaState& p) {
+  const double xi = fmax(0, phi/p.kt);
+  const double i32 = gfdi(GFDI::Order32, p.chi+xi, p.tau);
+  const double i52 = gfdi(GFDI::Order52, p.chi+xi, p.tau);
+  // TODO: check prefactor is the same here
+  return NePrefactor * pow(p.kt, 2.5) * (i32 + p.tau*i52);
 }
 
 double Plasma::totalIonChargeDensity(const double phi, const PlasmaState& p) {
@@ -91,6 +91,7 @@ double Plasma::totalIonChargeDensity(const double phi, const PlasmaState& p) {
   }
   return chargeDensity;
 }
+
 
 
 double Plasma::radiusWignerSeitz(const Element& e, const PlasmaState &p) {

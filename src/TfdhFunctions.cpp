@@ -78,13 +78,14 @@ TFDH::EnergyDeltas TFDH::embeddingEnergy(const TfdhSolution& tfdh,
   };
   const double ki = 1.5 * p.kt * integrateOverRadius(f_dni, tfdh.r.front(), tfdh.r.back());
 
-  const auto f_dke = [&] (const double r) -> double {return Plasma::neKinetic(tfdh(r), p) - Plasma::neKinetic(0.0, p);};
+  const auto f_dke = [&] (const double r) -> double {
+    return Plasma::electronKineticEnergyDensity(tfdh(r), p) - Plasma::electronKineticEnergyDensity(0.0, p);};
   const double ke = integrateOverRadius(f_dke, tfdh.r.front(), tfdh.r.back());
 
   // TODO: are these even physically motivated?
   const double dni = ki;
   const auto f_dne = [&] (const double r) -> double {return Plasma::ne(tfdh(r), p) - p.ne;};
-  const double dne = (Plasma::neKinetic(0.0,p) / p.ne) * integrateOverRadius(f_dne, tfdh.r.front(), tfdh.r.back());
+  const double dne = (Plasma::electronKineticEnergyDensity(0.0,p) / p.ne) * integrateOverRadius(f_dne, tfdh.r.front(), tfdh.r.back());
 
   return {fi, fe, f2, ki, ke, dni, dne, fi+fe+f2+ki+ke-dni-dne};
 }
