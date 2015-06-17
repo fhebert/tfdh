@@ -59,6 +59,41 @@ namespace {
     }
   }
 
+  inline double gfdi_small(const int k, const double chi, const double tau) {
+    double value = 0;
+    for (size_t i=1; i<=5; ++i) {
+      value += c[k][i-1] * sqrt(1 + khi[k][i-1]*tau/2) /
+        (exp(-khi[k][i-1]) + exp(-chi));
+    }
+    return value;
+  }
+
+  inline double gfdi_mid(const int k, const double chi, const double tau) {
+    double value = 0;
+    for (size_t i=1; i<=5; ++i) {
+      value += h[i-1] * pow(x[i-1], k) * pow(chi, k+3./2)
+        * sqrt(1 + chi*x[i-1]*tau/2) / (1 + exp(chi*(x[i-1] - 1)))
+        + v[i-1] * pow(xi[i-1] + chi, k+1./2) * sqrt(1 + (xi[i-1] + chi)*tau/2);
+    }
+    return value;
+  }
+
+  inline double gfdi_large(const int k, const double chi, const double tau) {
+    const double r = sqrt(chi*(1 + chi*tau/2));
+    return gfdi_helper(k, chi, tau, r)
+      + M_PI*M_PI/6. * pow(chi, k) * (k + 1./2 + (k+1)*chi*tau/2) / r;
+  }
+
+  // a cubic transition function which satisfies:
+  // f(0) = 0, f'(0) = 0
+  // f(1) = 1, f'(1) = 0
+  inline double transition(const double fl, const double fr,
+      const double x, const double xl, const double xr) {
+    const double z = (x-xl)/(xr-xl);
+    const double fz = 3.*z*z - 2.*cube(z);
+    return fl + fz*(fr-fl);
+  }
+
 } // end anonymous namespace
 
 
@@ -68,26 +103,25 @@ double gfdi(const GFDI order, const double chi, const double tau) {
 
   const int k = static_cast<int>(order);
 
-  if (chi <= 0.6) {
-    double value = 0;
-    for (size_t i=1; i<=5; ++i) {
-      value += c[k][i-1] * sqrt(1 + khi[k][i-1]*tau/2) /
-        (exp(-khi[k][i-1]) + exp(-chi));
-    }
-    return value;
+  if (chi <= 0.59) {
+    return gfdi_small(k, chi, tau);
   }
-  else if (chi < 14.0) {
-    double value = 0;
-    for (size_t i=1; i<=5; ++i) {
-      value += h[i-1] * pow(x[i-1], k) * pow(chi, k+3./2)
-        * sqrt(1 + chi*x[i-1]*tau/2) / (1 + exp(chi*(x[i-1] - 1)))
-        + v[i-1] * pow(xi[i-1] + chi, k+1./2) * sqrt(1 + (xi[i-1] + chi)*tau/2);
-    }
-    return value;
+  // smooth the transition from chi being "small" to "mid" over 0.59 -> 0.61
+  else if (chi < 0.61) {
+    const double gs = gfdi_small(k, chi, tau);
+    const double gm = gfdi_mid(k, chi, tau);
+    return transition(gs, gm, chi, 0.59, 0.61);
+  }
+  else if (chi <= 13.9) {
+    return gfdi_mid(k, chi, tau);
+  }
+  // smooth the "mid" to "large" transition over 13.9 -> 14.1
+  else if (chi < 14.1) {
+    const double gm = gfdi_mid(k, chi, tau);
+    const double gl = gfdi_large(k, chi, tau);
+    return transition(gm, gl, chi, 13.9, 14.1);
   }
   else {
-    const double r = sqrt(chi*(1 + chi*tau/2));
-    return gfdi_helper(k, chi, tau, r)
-      + M_PI*M_PI/6. * pow(chi, k) * (k + 1./2 + (k+1)*chi*tau/2) / r;
+    return gfdi_large(k, chi, tau);
   }
 }
