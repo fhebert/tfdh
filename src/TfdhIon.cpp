@@ -104,23 +104,34 @@ void TfdhIon::printRadialProfileToFile(const std::string& filename) const
   // intermediate quantities
   // TODO: see about cleaning this up
   std::vector<double> ne(tfdh.r.size(), 0);
+  std::vector<double> neb(tfdh.r.size(), 0);
   std::vector<double> ntot(tfdh.r.size(), 0);
+  std::vector<double> encl_plasma_charge(tfdh.r.size(), 0);
+  std::vector<double> encl_num_bound_electrons(tfdh.r.size(), 0);
+  const auto f_ntot = [&] (const double r) -> double {
+    return Plasma::totalIonChargeDensity(tfdh(r), ps) - Plasma::ne(tfdh(r), ps);
+  };
+  const auto f_nb = [&] (const double r) -> double {
+    return Plasma::neBound(tfdh(r), ps);
+  };
   for (size_t i=0; i<ne.size(); ++i) {
     ne[i] = Plasma::ne(tfdh.phi[i], ps);
+    neb[i] = Plasma::neBound(tfdh.phi[i], ps);
     ntot[i] = Plasma::totalIonChargeDensity(tfdh.phi[i], ps) - ne[i];
   }
-  const std::vector<double> neb = TFDH::boundElectronDensity(tfdh, ps);
-
-  const std::vector<double> enc_plasma_charge = accumulateOverRadius(tfdh.r, ntot);
-  const std::vector<double> enc_bound_elec = accumulateOverRadius(tfdh.r, neb);
+  for (size_t i=1; i<ne.size(); ++i) {
+    encl_plasma_charge[i] = integrateOverRadius(f_ntot, tfdh.r[0], tfdh.r[i]);
+  }
+  for (size_t i=1; i<ne.size(); ++i) {
+    encl_num_bound_electrons[i] = integrateOverRadius(f_nb, tfdh.r[0], tfdh.r[i]);
+  }
 
   // print profiles:
   const std::string sep = "    ";
   for (size_t i=0; i<tfdh.r.size(); ++i) {
     outfile << tfdh.r[i] << sep << tfdh.phi[i] << sep;
     outfile << ne[i] << sep << neb[i] << sep << ne[i]-neb[i] << sep;
-    outfile << e.Z + enc_plasma_charge[i] << sep << enc_bound_elec[i];
-    outfile << "\n";
+    outfile << e.Z + encl_plasma_charge[i] << sep << encl_num_bound_electrons[i] << "\n";
   }
 
   return;

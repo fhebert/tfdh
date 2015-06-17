@@ -6,7 +6,7 @@
 
 class Element;
 struct PlasmaState;
-struct TfdhSolution;
+class TfdhSolution;
 
 
 namespace TFDH {
