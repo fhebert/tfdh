@@ -5,7 +5,7 @@
 #include <vector>
 
 class Element;
-struct PlasmaState;
+class PlasmaState;
 class TfdhSolution;
 
 

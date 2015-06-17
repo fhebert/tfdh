@@ -6,7 +6,7 @@
 
 class Composition;
 class Element;
-struct PlasmaState;
+class PlasmaState;
 
 
 namespace Plasma {

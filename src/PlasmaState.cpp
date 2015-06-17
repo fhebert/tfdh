@@ -30,20 +30,20 @@ namespace {
     return ni;
   }
 
-  class NeErrorFromChi : public GSL::FunctionObject {
-    private:
-      const double ne0, kt, tau;
-    public:
-      NeErrorFromChi(const double ne, const double kt, const double tau)
-        : ne0(ne), kt(kt), tau(tau) {}
-      double operator()(const double chi) const override {
-        // argument phi = 0
-        return Plasma::ne(chi, kt, tau) - ne0;
-      }
-  };
-
   double invertForChi(const double ne, const double kt, const double tau) {
+
     // function to find root of:
+    class NeErrorFromChi : public GSL::FunctionObject {
+      private:
+        const double ne0, kt, tau;
+      public:
+        NeErrorFromChi(const double ne, const double kt, const double tau)
+          : ne0(ne), kt(kt), tau(tau) {}
+        double operator()(const double chi) const override {
+          // argument phi = 0
+          return Plasma::ne(chi, kt, tau) - ne0;
+        }
+    };
     const NeErrorFromChi deltaNe(ne, kt, tau);
 
     // find a chi interval which brackets the root
