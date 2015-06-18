@@ -4,8 +4,8 @@
 
 #include "Element.h"
 #include "PlasmaState.h"
-#include "TfdhOdeSolve.h"
 #include "TfdhFunctions.h"
+#include "TfdhOdeSolve.h"
 #include "TfdhSolution.h"
 
 #include <vector>
@@ -18,14 +18,12 @@ class TfdhIon {
     void printSummaryToFile(const std::string& filename) const;
     void printRadialProfileToFile(const std::string& filename) const;
 
-
     const PlasmaState ps;
     const Element e;
     const TfdhSolution tfdh;
     const double numberBoundElectrons;
     const TFDH::EnergyDeltas embeddingEnergies;
     const std::vector<double> exclusionRadii;
-
 };
 
 

@@ -9,9 +9,9 @@
 
 #include <cassert>
 #include <cmath>
-#include <vector>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_odeiv2.h>
+#include <vector>
 
 
 namespace {
@@ -26,7 +26,7 @@ namespace {
     const PlasmaState& p;
   };
 
-  
+
   int tfdhOde(double r, const double f[], double dfdr[], void *params) {
     const double& qe = PhysicalConstantsCGS::ElectronCharge;
     const double phi = qe*f[0]/r;
@@ -37,8 +37,8 @@ namespace {
     dfdr[1] = -4.0*M_PI*qe * r * (ionChargeDensity - ne);
     return GSL_SUCCESS;
   }
-  
-  
+
+
   IntegrationResults integrateODE(const Element& e, const PlasmaState& p,
       const double r_init, const double r_final, const double dv0)
   {

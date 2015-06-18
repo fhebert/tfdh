@@ -8,7 +8,7 @@
 
 namespace GSL {
 
-  // simple wrapper around GSL splines
+  // simple wrapper class around GSL splines
   class Spline {
     private:
       gsl_interp_accel* acc;
