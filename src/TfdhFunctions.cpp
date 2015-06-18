@@ -62,7 +62,7 @@ TFDH::EnergyDeltas TFDH::embeddingEnergy(const TfdhSolution& tfdh,
   const double fe = integrateOverRadius(f_dfe, tfdh.r.front(), tfdh.r.back());
 
   const auto f_fce = [&] (const double r) -> double {
-    const double qe = PhysicalConstantsCGS::ElectronCharge;
+    const double& qe = PhysicalConstantsCGS::ElectronCharge;
     const double phi = tfdh(r);
     const double phi_ext = e.A * qe * qe / r;
     return 0.5 * (Plasma::totalIonChargeDensity(phi, p) - Plasma::ne(phi, p)) * (phi_ext - phi);

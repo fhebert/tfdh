@@ -13,8 +13,8 @@
 
 namespace {
 
-  const double me = PhysicalConstantsCGS::ElectronMass;
-  const double hb = PhysicalConstantsCGS::Hbar;
+  const double& me = PhysicalConstantsCGS::ElectronMass;
+  const double& hb = PhysicalConstantsCGS::Hbar;
   const double NePrefactor = pow(2.0*me, 1.5) / (2.0 * M_PI*M_PI * hb*hb*hb);
 
   class FermiDiracDistribution : public GSL::FunctionObject {
