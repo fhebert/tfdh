@@ -11,6 +11,10 @@ class TfdhSolution;
 
 namespace TFDH {
 
+  double boundElectrons(const TfdhSolution& tfdh, const PlasmaState& p, double cutoff=0);
+
+  std::vector<double> exclusionRadii(const TfdhSolution& tfdh, const Element& e, const PlasmaState& p);
+
   struct EnergyDeltas {
     const double fi;
     const double fe;
@@ -21,10 +25,6 @@ namespace TFDH {
     const double ne;
     const double total;
   };
-
-  std::vector<double> boundElectronDensity(const TfdhSolution& tfdh, const PlasmaState& p, double cutoff=0);
-  double boundElectrons(const TfdhSolution& tfdh, const PlasmaState& p, double cutoff=0);
-  std::vector<double> exclusionRadii(const TfdhSolution& tfdh, const Element& e, const PlasmaState& p);
 
   EnergyDeltas embeddingEnergy(const TfdhSolution& tfdh, const PlasmaState& p, const Element& e);
 
