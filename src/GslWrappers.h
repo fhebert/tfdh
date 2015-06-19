@@ -8,6 +8,20 @@
 
 namespace GSL {
 
+  // simple functor class to help interfacing with gsl_function.
+  // derived classes representing a function f(x) should hold any needed
+  // parameters as member variables, and operator()(double x) should evaluate
+  // the function f(x).
+  //
+  // NOTE: the GSL wrappers below could in principle take C++11 lambdas instead
+  //       of this custom function object, however i did not find an elegant
+  //       way to call these lambdas using GSL's C interfaces...
+  class FunctionObject {
+    public:
+      virtual ~FunctionObject() = default;
+      virtual double operator()(double x) const = 0;
+  };
+
   // simple wrapper class around GSL splines
   class Spline {
     private:
@@ -17,22 +31,6 @@ namespace GSL {
       Spline(const std::vector<double>& x, const std::vector<double>& f);
       ~Spline();
       double eval(double r) const;
-  };
-
-
-  // simple base class to help interfacing with gsl_function.
-  //
-  // derived classes should contain any necessary parameters as member
-  // variables, and operator() should evaluate the function at the given
-  // value of the parameter.
-  //
-  // NOTE: this is kind of like a hacky lambda. this is used instead of a
-  // real c++11 lambda because i couldn't find an elegant way to mesh such
-  // a lambda with the gsl_function interface.
-  class FunctionObject {
-    public:
-      virtual ~FunctionObject() = default;
-      virtual double operator()(double x) const = 0;
   };
 
   // find a root of func in the interval x1 to x2

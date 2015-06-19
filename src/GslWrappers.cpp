@@ -16,7 +16,7 @@ namespace {
   //     interface AND the data needed to compute f(x)
   // f.function calls this wrapper, which casts back to FunctionObject and
   //     calls the member function f(x)
-  double callFunctionFromObject(const double x, void *params) {
+  inline double callFunctionFromObject(const double x, void *params) {
     const GSL::FunctionObject* func = static_cast<const GSL::FunctionObject*>(params);
     return (*func)(x);
   }
@@ -31,13 +31,11 @@ GSL::Spline::Spline(const std::vector<double>& x, const std::vector<double>& f)
   gsl_spline_init(spline, x.data(), f.data(), x.size());
 }
 
-
 GSL::Spline::~Spline()
 {
   gsl_spline_free(spline);
   gsl_interp_accel_free(acc);
 }
-
 
 double GSL::Spline::eval(const double r) const
 {
