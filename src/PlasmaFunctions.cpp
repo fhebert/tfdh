@@ -79,7 +79,6 @@ double Plasma::electronKineticEnergyDensity(const double phi, const PlasmaState&
   const double xi = fmax(0, phi/p.kt);
   const double i32 = gfdi(GFDI::Order32, p.chi+xi, p.tau);
   const double i52 = gfdi(GFDI::Order52, p.chi+xi, p.tau);
-  // TODO: check prefactor is the same here
   return NePrefactor * pow(p.kt, 2.5) * (i32 + p.tau*i52);
 }
 
