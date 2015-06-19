@@ -97,41 +97,42 @@ void TfdhIon::printRadialProfileToFile(const std::string& filename) const
   outfile << "# col #1 = potential [Zeff e^2 / r]\n";
   outfile << "# col #2 = electron density\n";
   outfile << "# col #3 = bound portion of electron density\n";
-  outfile << "# col #4 = free portion of electron density (= 2-3)\n";
-  outfile << "# col #5 = enclosed net charge in units of q_e\n";
-  outfile << "# col #6 = enclosed bound electron charge in units of q_e\n";
+  outfile << "# col #4 = free portion of electron density (total - bound)\n";
+  outfile << "# col #5 = total ion charge density (Zi * ni)\n";
+  outfile << "# col #6 = enclosed net charge in units of q_e\n";
+  outfile << "# col #7 = enclosed bound electron charge in units of q_e\n";
 
-  // intermediate quantities
-  // TODO: see about cleaning this up
-  std::vector<double> ne(tfdh.r.size(), 0);
-  std::vector<double> neb(tfdh.r.size(), 0);
-  std::vector<double> ntot(tfdh.r.size(), 0);
-  std::vector<double> encl_plasma_charge(tfdh.r.size(), 0);
-  std::vector<double> encl_num_bound_electrons(tfdh.r.size(), 0);
-  const auto f_ntot = [&] (const double r) -> double {
+  // needed for cumulative distribution output
+  const auto f_charge = [&] (const double r) -> double {
     return Plasma::totalIonChargeDensity(tfdh(r), ps) - Plasma::ne(tfdh(r), ps);
   };
   const auto f_nb = [&] (const double r) -> double {
     return Plasma::neBound(tfdh(r), ps);
   };
-  for (size_t i=0; i<ne.size(); ++i) {
-    ne[i] = Plasma::ne(tfdh.phi[i], ps);
-    neb[i] = Plasma::neBound(tfdh.phi[i], ps);
-    ntot[i] = Plasma::totalIonChargeDensity(tfdh.phi[i], ps) - ne[i];
-  }
-  for (size_t i=1; i<ne.size(); ++i) {
-    encl_plasma_charge[i] = integrateOverRadius(f_ntot, tfdh.r[0], tfdh.r[i]);
-  }
-  for (size_t i=1; i<ne.size(); ++i) {
-    encl_num_bound_electrons[i] = integrateOverRadius(f_nb, tfdh.r[0], tfdh.r[i]);
-  }
+  double accumulate_charge = 0;
+  double accumulate_numbound = 0;
 
   // print profiles:
   const std::string sep = "    ";
   for (size_t i=0; i<tfdh.r.size(); ++i) {
-    outfile << tfdh.r[i] << sep << tfdh.phi[i] << sep;
-    outfile << ne[i] << sep << neb[i] << sep << ne[i]-neb[i] << sep;
-    outfile << e.Z + encl_plasma_charge[i] << sep << encl_num_bound_electrons[i] << "\n";
+    // columns 0,1 -- the tfdh (r,phi) results
+    outfile << tfdh.r[i] << sep << tfdh.phi[i];
+
+    // columns 2,3,4 -- the electron densities
+    const double ne = Plasma::ne(tfdh.phi[i], ps);
+    const double neb = Plasma::neBound(tfdh.phi[i], ps);
+    outfile << sep << ne << sep << neb << sep << ne-neb;
+
+    // column 5 -- ion charge density
+    outfile << sep << Plasma::totalIonChargeDensity(tfdh.phi[i], ps);
+
+    // columns 6,7 -- the cumulative distributions
+    if (i > 0) {
+      accumulate_charge += integrateOverRadius(f_charge, tfdh.r[i-1], tfdh.r[i]);
+      accumulate_numbound += integrateOverRadius(f_nb, tfdh.r[i-1], tfdh.r[i]);
+    }
+    outfile << sep << e.Z + accumulate_charge << sep << accumulate_numbound;
+    outfile << "\n";
   }
 
   return;
