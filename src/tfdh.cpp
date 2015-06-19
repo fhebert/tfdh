@@ -11,6 +11,8 @@
 #include "TfdhOdeSolve.h"
 #include "TfdhSolution.h"
 
+#include <cassert>
+#include <ctime>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -27,8 +29,21 @@ namespace Elements {
 } // namespace Elements
 
 
+// helper namespace for functions
+namespace {
+  std::string getTime() {
+    std::time_t t = std::time(nullptr);
+    char str[128];
+    assert(std::strftime(str, sizeof(str), "%c", std::localtime(&t)));
+    return std::string(str);
+  }
+} // anon namespace
+
+
 
 int main() {
+
+  std::string time = getTime();
 
   const double rho = 1e3;
   const double t = 1e8;
@@ -38,8 +53,8 @@ int main() {
   const PlasmaState ps(rho, kt, Composition(species), false);
 
   const TfdhIon ion(ps, Elements::Fe56);
-  ion.printSummaryToFile("summary.data");
-  ion.printRadialProfileToFile("profile.data");
+  ion.printSummaryToFile("summary.data", time);
+  ion.printRadialProfileToFile("profile.data", time);
 
   return 0;
 }

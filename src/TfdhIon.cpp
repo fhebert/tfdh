@@ -27,15 +27,14 @@ TfdhIon::TfdhIon(const PlasmaState& plasmaState, const Element& element)
 {}
 
 
-void TfdhIon::printSummaryToFile(const std::string& filename) const
+void TfdhIon::printSummaryToFile(const std::string& filename, const std::string& time) const
 {
   std::ofstream outfile(filename);
   assert(outfile and "couldn't open file");
   //outfile.precision(16);
 
-  outfile << "summary of TFDH ion-in-plasma calculation results\n";
-  outfile << "code run on TODO\n"; // TODO
-  outfile << "code revision = TODO\n"; // TODO
+  outfile << "# summary of TFDH ion-in-plasma calculation results\n";
+  outfile << "# code run on " << time << "\n";
   outfile << "\n";
 
   outfile << "central ion = " << e << "\n";
@@ -82,7 +81,7 @@ void TfdhIon::printSummaryToFile(const std::string& filename) const
 }
 
 
-void TfdhIon::printRadialProfileToFile(const std::string& filename) const
+void TfdhIon::printRadialProfileToFile(const std::string& filename, const std::string& time) const
 {
   std::ofstream outfile(filename);
   assert(outfile and "couldn't open file");
@@ -90,8 +89,7 @@ void TfdhIon::printRadialProfileToFile(const std::string& filename) const
 
   // print header:
   outfile << "# radial profile of TFDH ion-in-plasma calculation results\n";
-  outfile << "# code run on TODO\n"; // TODO
-  outfile << "# code revision = TODO\n"; // TODO
+  outfile << "# code run on " << time << "\n";
   outfile << "#\n";
   outfile << "# col #0 = radius\n";
   outfile << "# col #1 = potential [Zeff e^2 / r]\n";
