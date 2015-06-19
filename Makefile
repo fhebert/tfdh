@@ -21,11 +21,6 @@ exec: $(OBJS) | bin
 	@ echo "  CXXLD     tfdh"
 	@ $(CXX) $(CXXFLAGS) $(LIBS) $(HEADER_OBJS) build/tfdh.o -o bin/tfdh
 
-tests: $(OBJS) | bin
-	@ echo "  CXX       testIntegrateOverRadius"
-	@ $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c tests/testIntegrateOverRadius.cpp -o build/testIntegrateOverRadius.o -Isrc
-	@ $(CXX) $(CXXFLAGS) $(LIBS) $(HEADER_OBJS) build/testIntegrateOverRadius.o -o bin/testIntegrateOverRadius
-
 build/%.o: src/%.cpp | build
 	@ echo "  CXX       $*.cpp"
 	@ $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/$*.cpp -o build/$*.o
