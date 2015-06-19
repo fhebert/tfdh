@@ -85,8 +85,7 @@ double GSL::integrate(const GSL::FunctionObject& func, const double xi, const do
   f.params = const_cast<GSL::FunctionObject*>(&func);
   f.function = &callFunctionFromObject;
 
-  // TODO: determine minimal sufficient size, or perhaps allocate a global
-  //       workspace to reduce memory load
+  // NOTE: this choice has worked so far, but could be increased if necessary
   const size_t max_intervals = 100;
   gsl_integration_workspace* ws = gsl_integration_workspace_alloc(max_intervals);
 
