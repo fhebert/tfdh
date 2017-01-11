@@ -1,25 +1,26 @@
 
+# Makefile for a simple, single-exec, C++ build
+# * expects all source files (cpp,h) in ./src
+# * produces object and dependency files in ./build
+# * produces executable in ./bin
+
+EXECUTABLE := tfdh
+
 CXX := clang++
 CPPFLAGS :=
 CXXFLAGS := -O3 -Wall -Wextra -std=c++11 -march=native
-LIBS = -lm -lgsl
+LIBS := -lm -lgsl
 
 SRCS := $(wildcard src/*.cpp)
 OBJS := $(subst src,build,$(SRCS:.cpp=.o))
 DEPS := $(subst src,build,$(SRCS:.cpp=.d))
 
-# when linking executables, only want object files corresponding to headers
-HEADERS := $(wildcard src/*.h)
-POSSIBLE_HEADER_OBJS := $(subst src,build,$(HEADERS:.h=.o))
-HEADER_OBJS := $(filter $(POSSIBLE_HEADER_OBJS), $(OBJS))
+.PHONY: all
+all: bin/$(EXECUTABLE)
 
-all: exec
-
-# we want all object files compiled before we link, but we only link in
-# those object files that correspond to a header.
-exec: $(OBJS) | bin
-	@ echo "  CXXLD     tfdh"
-	@ $(CXX) $(CXXFLAGS) $(LIBS) $(HEADER_OBJS) build/tfdh.o -o bin/tfdh
+bin/$(EXECUTABLE): $(OBJS) | bin
+	@ echo "  CXXLD     $(EXECUTABLE)"
+	@ $(CXX) $(CXXFLAGS) $(LIBS) $(OBJS) -o bin/$(EXECUTABLE)
 
 build/%.o: src/%.cpp | build
 	@ echo "  CXX       $*.cpp"
@@ -31,9 +32,11 @@ build:
 bin:
 	@ mkdir -p bin
 
+.PHONY: clean
 clean:
-	@ $(RM) $(OBJS) $(DEPS) bin/tfdh
+	@ $(RM) $(OBJS) $(DEPS) bin/$(EXECUTABLE)
 
+.PHONY: immaculate
 immaculate: clean
 	@ $(RM) -r build bin
 
