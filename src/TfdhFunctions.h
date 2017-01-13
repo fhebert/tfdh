@@ -26,7 +26,7 @@ namespace TFDH {
     const double total;
   };
 
-  EnergyDeltas embeddingEnergy(const TfdhSolution& tfdh, const PlasmaState& p, const Element& e);
+  EnergyDeltas embeddingEnergy(const TfdhSolution& tfdh, const Element& e, const PlasmaState& p);
 
 }
 

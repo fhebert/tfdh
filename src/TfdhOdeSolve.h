@@ -1,6 +1,6 @@
 
-#ifndef TFDH_ODE_SOLVE_HPP
-#define TFDH_ODE_SOLVE_HPP
+#ifndef TFDH_ODE_SOLVE_H
+#define TFDH_ODE_SOLVE_H
 
 #include "TfdhSolution.h"
 
@@ -15,4 +15,4 @@ namespace TFDH {
 }
 
 
-#endif // TFDH_ODE_SOLVE_HPP
+#endif // TFDH_ODE_SOLVE_H

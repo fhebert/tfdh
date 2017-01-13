@@ -53,7 +53,7 @@ std::vector<double> TFDH::exclusionRadii(const TfdhSolution& tfdh,
 
 
 TFDH::EnergyDeltas TFDH::embeddingEnergy(const TfdhSolution& tfdh,
-    const PlasmaState& p, const Element& e)
+    const Element& e, const PlasmaState& p)
 {
   const auto f_dfi = [&] (const double r) -> double {return tfdh(r) * Plasma::totalIonChargeDensity(tfdh(r), p);};
   const double fi = integrateOverRadius(f_dfi, tfdh.r.front(), tfdh.r.back());

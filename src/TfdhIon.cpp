@@ -22,7 +22,7 @@ TfdhIon::TfdhIon(const PlasmaState& plasmaState, const Element& element)
   e(element),
   tfdh(TFDH::solve(e, ps)),
   numberBoundElectrons(TFDH::boundElectrons(tfdh, ps)),
-  embeddingEnergies(TFDH::embeddingEnergy(tfdh, ps, e)),
+  embeddingEnergies(TFDH::embeddingEnergy(tfdh, e, ps)),
   exclusionRadii(TFDH::exclusionRadii(tfdh, e, ps))
 {}
 
