@@ -5,7 +5,6 @@
 #include "Element.h"
 #include "PlasmaState.h"
 #include "TfdhFunctions.h"
-#include "TfdhOdeSolve.h"
 #include "TfdhSolution.h"
 
 #include <vector>

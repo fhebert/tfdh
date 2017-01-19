@@ -2,14 +2,16 @@
 
 #include "Element.h"
 #include "Composition.h"
-#include "IntegrateOverRadius.h"
 #include "PhysicalConstants.h"
-#include "PlasmaFunctions.h"
 #include "PlasmaState.h"
 #include "TfdhIon.h"
-#include "TfdhFunctions.h"
-#include "TfdhOdeSolve.h"
-#include "TfdhSolution.h"
+
+// Keep these handy for experiments
+//#include "IntegrateOverRadius.h"
+//#include "PlasmaFunctions.h"
+//#include "TfdhFunctions.h"
+//#include "TfdhOdeSolve.h"
+//#include "TfdhSolution.h"
 
 #include <cassert>
 #include <ctime>
