@@ -1,6 +1,6 @@
 
-#ifndef TFDH_PHYSICAL_CONSTANTS_CGS_H
-#define TFDH_PHYSICAL_CONSTANTS_CGS_H
+#ifndef TFDH_PHYSICAL_CONSTANTS_H
+#define TFDH_PHYSICAL_CONSTANTS_H
 
 #include <cmath>
 
@@ -30,4 +30,4 @@ namespace PhysicalConstantsCGS
 }
 
 
-#endif // TFDH_PHYSICAL_CONSTANTS_CGS_H
+#endif // TFDH_PHYSICAL_CONSTANTS_H

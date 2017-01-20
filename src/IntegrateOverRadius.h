@@ -1,6 +1,6 @@
 
-#ifndef TFDH_RADIAL_INTEGRAL_H
-#define TFDH_RADIAL_INTEGRAL_H
+#ifndef TFDH_INTEGRATE_OVER_RADIUS_H
+#define TFDH_INTEGRATE_OVER_RADIUS_H
 
 #include "GslWrappers.h"
 
@@ -26,5 +26,5 @@ double integrateOverRadius(const T& func, const double rmin, const double rmax)
 }
 
 
-#endif // TFDH_RADIAL_INTEGRAL_H
+#endif // TFDH_INTEGRATE_OVER_RADIUS_H
 
